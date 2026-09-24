@@ -65,7 +65,7 @@
       (s, i) => `
     <article class="service reveal ${s.destaque ? "service--featured" : ""}" style="--d:${(i % 3) * 80}ms">
       <figure class="ph service__photo" data-label="${s.nome}">
-        <img src="${s.foto}" alt="${s.nome}" loading="lazy" onerror="this.parentNode.classList.add('empty');this.remove()" />
+        <img src="${s.foto}" alt="${s.nome}" loading="lazy" />
         ${s.destaque ? `<span class="service__tag"><svg><use href="#i-star"/></svg>${s.destaque}</span>` : ""}
       </figure>
       <div class="service__body">
@@ -79,7 +79,7 @@
             <small>Porte <span data-porte-nome></span></small>
             <strong data-preco="${i}"></strong>
           </div>
-          <a class="btn btn--wa btn--sm" data-servico="${i}" target="_blank" rel="noopener">
+          <a class="btn btn--wa btn--sm" data-servico="${i}" target="_blank" rel="noopener noreferrer">
             <svg><use href="#i-wa"/></svg>Agendar
           </a>
         </div>
@@ -87,6 +87,16 @@
     </article>`
     )
     .join("");
+
+  /* ---------- Foto que ainda não existe: mostra o espaço decorado ---------- */
+  const fotoFaltando = (img) => {
+    img.parentNode.classList.add("empty");
+    img.remove();
+  };
+  document.querySelectorAll(".ph img").forEach((img) => {
+    if (img.complete && !img.naturalWidth) fotoFaltando(img);
+    else img.addEventListener("error", () => fotoFaltando(img), { once: true });
+  });
 
   function atualizarPrecos() {
     const porte = CONFIG.portes.find((p) => p.id === porteAtual);
