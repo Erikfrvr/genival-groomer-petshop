@@ -26,12 +26,12 @@ Enquanto uma foto não existir, o site mostra um espaço decorado no lugar — n
 ## 3. Publicar no GitHub Pages (grátis)
 
 1. Crie uma conta em <https://github.com> (se ainda não tiver).
-2. Clique em **New repository** → dê um nome (ex.: `banho-e-tosa`) → marque **Public** → **Create repository**.
+2. Clique em **New repository** → dê um nome (ex.: `genival-groomer-petshop`) → marque **Public** → **Create repository**.
 3. Na página do repositório, clique em **uploading an existing file**.
 4. Arraste **todos os arquivos e a pasta `images`** desta pasta → **Commit changes**.
 5. Vá em **Settings → Pages**. Em *Branch*, escolha **main** e **/ (root)** → **Save**.
 6. Em 1–2 minutos o site estará no ar em:
-   `https://SEU-USUARIO.github.io/banho-e-tosa/`
+   `https://SEU-USUARIO.github.io/genival-groomer-petshop/`
 
 Para atualizar depois (novas fotos, preços): entre no repositório → **Add file → Upload files**
 (ou clique no arquivo → ícone de lápis para editar) → **Commit changes**.
@@ -39,7 +39,7 @@ Para atualizar depois (novas fotos, preços): entre no repositório → **Add fi
 ### Prévia bonita no WhatsApp
 Depois de publicado, troque no `index.html` a linha
 `<meta property="og:image" content="images/capa-link.jpg" />` pelo endereço completo, ex.:
-`https://SEU-USUARIO.github.io/banho-e-tosa/images/capa-link.jpg` — assim a imagem aparece quando o link for enviado.
+`https://SEU-USUARIO.github.io/genival-groomer-petshop/images/capa-link.jpg` — assim a imagem aparece quando o link for enviado.
 
 ## Testar no computador
 É só dar dois cliques no `index.html`.
