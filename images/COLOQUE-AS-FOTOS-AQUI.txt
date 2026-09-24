@@ -1,0 +1,16 @@
+Coloque as fotos nesta pasta com EXATAMENTE estes nomes (tudo minúsculo, .jpg):
+
+perfil.jpg                 -> foto dele com um pet (topo do site) — de preferência em pé/vertical
+sobre.jpg                  -> foto dele trabalhando (seção "Sobre")
+banho.jpg                  -> serviço Banho
+banho-tosa-higienica.jpg   -> serviço Banho + Tosa Higiênica
+tosa-bebe.jpg              -> serviço Banho e Tosa Bebê
+tosa-maquina.jpg           -> serviço Tosa na Máquina
+tosa-tesoura.jpg           -> serviço Tosa na Tesoura
+hidratacao.jpg             -> serviço Hidratação
+galeria-1.jpg ... galeria-6.jpg -> fotos dos pets atendidos
+capa-link.jpg              -> JÁ CRIADA com a logo (aparece quando o link é enviado no WhatsApp)
+logo.webp                  -> JÁ CRIADA a partir do cartão
+
+Enquanto a foto não existir, o site mostra um espaço decorado no lugar.
+Dica: reduza as fotos para no máximo ~1200px de largura (use https://squoosh.app) para o site abrir rápido no celular.
