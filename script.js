@@ -1,6 +1,21 @@
 (function () {
+  /* ---------- Segurança: não deixa outro site exibir esta página dentro de um iframe ---------- */
+  if (window.top !== window.self) {
+    try {
+      window.top.location = window.self.location.href;
+    } catch (e) {
+      document.documentElement.hidden = true;
+    }
+    return;
+  }
+
+  // Escapa textos do config.js antes de colocar no HTML
+  const esc = (v) =>
+    String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const soNumeros = (v) => String(v).replace(/\D/g, "");
+
   const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
-  const waLink = (msg) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+  const waLink = (msg) => `https://wa.me/${soNumeros(CONFIG.whatsapp)}?text=${encodeURIComponent(msg)}`;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Nome e links gerais ---------- */
@@ -12,9 +27,9 @@
   const fone = (n) => n.replace(/^55(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
   document.querySelectorAll("[data-fone]").forEach((el) => (el.textContent = fone(CONFIG[el.dataset.fone])));
   document.querySelectorAll("[data-wa2]").forEach(
-    (el) => (el.href = `https://wa.me/${CONFIG.whatsapp2}?text=${encodeURIComponent(CONFIG.mensagemPadrao)}`)
+    (el) => (el.href = `https://wa.me/${soNumeros(CONFIG.whatsapp2)}?text=${encodeURIComponent(CONFIG.mensagemPadrao)}`)
   );
-  document.querySelectorAll("[data-email]").forEach((el) => (el.href = `mailto:${CONFIG.email}`));
+  document.querySelectorAll("[data-email]").forEach((el) => (el.href = `mailto:${encodeURI(CONFIG.email)}`));
   document.querySelectorAll("[data-email-texto]").forEach((el) => (el.textContent = CONFIG.email));
   document.querySelectorAll("[data-endereco]").forEach((el) => (el.textContent = CONFIG.endereco));
   document.querySelectorAll("[data-mapa]").forEach(
@@ -36,10 +51,10 @@
     CONFIG.portes
       .map(
         (p, i) => `
-      <button class="size-picker__btn" role="tab" data-porte="${p.id}" aria-selected="${i === 0}">
-        <span class="size-picker__emoji" aria-hidden="true">${p.icone}</span>
-        <strong>${p.nome}</strong>
-        <small>${p.detalhe}</small>
+      <button class="size-picker__btn" role="tab" data-porte="${esc(p.id)}" aria-selected="${i === 0}">
+        <span class="size-picker__emoji" aria-hidden="true">${esc(p.icone)}</span>
+        <strong>${esc(p.nome)}</strong>
+        <small>${esc(p.detalhe)}</small>
       </button>`
       )
       .join("") + `<span class="size-picker__glider" aria-hidden="true"></span>`;
@@ -63,17 +78,17 @@
   lista.innerHTML = CONFIG.servicos
     .map(
       (s, i) => `
-    <article class="service reveal ${s.destaque ? "service--featured" : ""}" style="--d:${(i % 3) * 80}ms">
-      <figure class="ph service__photo" data-label="${s.nome}">
-        <img src="${s.foto}" alt="${s.nome}" loading="lazy" />
-        ${s.destaque ? `<span class="service__tag"><svg><use href="#i-star"/></svg>${s.destaque}</span>` : ""}
+    <article class="service reveal ${s.destaque ? "service--featured" : ""}">
+      <figure class="ph service__photo" data-label="${esc(s.nome)}">
+        <img src="${esc(s.foto)}" alt="${esc(s.nome)}" loading="lazy" />
+        ${s.destaque ? `<span class="service__tag"><svg><use href="#i-star"/></svg>${esc(s.destaque)}</span>` : ""}
       </figure>
       <div class="service__body">
         <div class="service__top">
-          <h3>${s.nome}</h3>
-          <span class="service__time"><svg><use href="#i-clock"/></svg>${s.duracao}</span>
+          <h3>${esc(s.nome)}</h3>
+          <span class="service__time"><svg><use href="#i-clock"/></svg>${esc(s.duracao)}</span>
         </div>
-        <p>${s.descricao}</p>
+        <p>${esc(s.descricao)}</p>
         <div class="service__foot">
           <div class="price">
             <small>Porte <span data-porte-nome></span></small>
@@ -87,6 +102,7 @@
     </article>`
     )
     .join("");
+  lista.querySelectorAll(".service").forEach((el, i) => el.style.setProperty("--d", `${(i % 3) * 80}ms`));
 
   /* ---------- Foto que ainda não existe: mostra o espaço decorado ---------- */
   const fotoFaltando = (img) => {
@@ -124,8 +140,8 @@
     .map(
       (a) => `
     <li>
-      <span class="extras__icon" aria-hidden="true">${a.icone}</span>
-      <span class="extras__name">${a.nome}</span>
+      <span class="extras__icon" aria-hidden="true">${esc(a.icone)}</span>
+      <span class="extras__name">${esc(a.nome)}</span>
       <span class="extras__price">${
         a.preco === 0 ? '<em class="free">Cortesia</em>' : (a.aPartirDe ? "<small>a partir de</small> " : "") + brl(a.preco)
       }</span>
