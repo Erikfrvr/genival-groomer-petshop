@@ -627,6 +627,7 @@ p { margin: 0; text-wrap: pretty; }
 }
 .service__photo { aspect-ratio: 16 / 10; }
 .service__photo img { transition: transform 0.6s ease; }
+.ph.empty img { display: none; }
 .service__tag {
   position: absolute;
   top: 14px;

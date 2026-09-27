@@ -35,7 +35,8 @@ const CONFIG = {
       foto: "images/banho.jpg",
       descricao: "Shampoo e condicionador para cada tipo de pelo, secagem cuidadosa, escovação, perfume, limpeza de ouvidos e corte de unhas.",
       duracao: "1h a 1h30",
-      precos: { p: 45, m: 60, g: 80 },
+      precos: { p: 60, m: 90, g: 130 },
+      aPartirDe: true,
     },
     {
       nome: "Banho + Tosa Higiênica",

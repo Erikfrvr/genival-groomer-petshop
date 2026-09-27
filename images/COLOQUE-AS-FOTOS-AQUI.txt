@@ -9,6 +9,16 @@ tosa-maquina.jpg           -> serviço Tosa na Máquina
 tosa-tesoura.jpg           -> serviço Tosa na Tesoura
 hidratacao.jpg             -> serviço Hidratação
 galeria-1.jpg ... galeria-6.jpg -> fotos dos pets atendidos
+
+FOTO POR PORTE (opcional) — a foto do serviço muda quando o cliente escolhe o porte:
+  acrescente -p, -m ou -g no nome. Ex.: para o Banho
+    banho-p.jpg  -> cachorro pequeno
+    banho-m.jpg  -> cachorro médio
+    banho-g.jpg  -> cachorro grande
+  Vale para todos os serviços (tosa-maquina-g.jpg, hidratacao-m.jpg...).
+  Se a foto do porte não existir, o site usa a foto normal (banho.jpg).
+  Formato ideal: horizontal (16:10 ou 16:9).
+
 capa-link.jpg              -> JÁ CRIADA com a logo (aparece quando o link é enviado no WhatsApp)
 logo.webp                  -> JÁ CRIADA a partir do cartão
 

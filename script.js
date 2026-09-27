@@ -65,7 +65,7 @@
       (s, i) => `
     <article class="service reveal ${s.destaque ? "service--featured" : ""}" style="--d:${(i % 3) * 80}ms">
       <figure class="ph service__photo" data-label="${s.nome}">
-        <img src="${s.foto}" alt="${s.nome}" loading="lazy" />
+        <img data-foto="${i}" alt="${s.nome}" loading="lazy" />
         ${s.destaque ? `<span class="service__tag"><svg><use href="#i-star"/></svg>${s.destaque}</span>` : ""}
       </figure>
       <div class="service__body">
@@ -76,7 +76,7 @@
         <p>${s.descricao}</p>
         <div class="service__foot">
           <div class="price">
-            <small>Porte <span data-porte-nome></span></small>
+            <small>Porte <span data-porte-nome></span>${s.aPartirDe ? " · a partir de" : ""}</small>
             <strong data-preco="${i}"></strong>
           </div>
           <a class="btn btn--wa btn--sm" data-servico="${i}" target="_blank" rel="noopener noreferrer">
@@ -93,13 +93,46 @@
     img.parentNode.classList.add("empty");
     img.remove();
   };
-  document.querySelectorAll(".ph img").forEach((img) => {
+  document.querySelectorAll(".ph img:not([data-foto])").forEach((img) => {
     if (img.complete && !img.naturalWidth) fotoFaltando(img);
     else img.addEventListener("error", () => fotoFaltando(img), { once: true });
   });
 
+  /* ---------- Foto do serviço conforme o porte ----------
+     Tenta images/banho-g.jpg (porte grande); se não existir, usa images/banho.jpg */
+  const fotosQueFalharam = new Set();
+  const fotoDoPorte = (s) => s.foto.replace(/(\.\w+)$/, `-${porteAtual}$1`);
+
+  function mostrarFoto(img, s) {
+    const fig = img.parentNode;
+    const tentativas = [fotoDoPorte(s), s.foto].filter((f) => !fotosQueFalharam.has(f));
+    const pedido = (img.dataset.pedido = (+img.dataset.pedido || 0) + 1);
+    const tentar = () => {
+      const src = tentativas.shift();
+      if (!src) return fig.classList.add("empty");
+      if (src === img.dataset.atual) return;
+      // Carrega "por fora" e só troca a foto do card quando ela existir
+      const teste = new Image();
+      teste.onload = () => {
+        if (+img.dataset.pedido !== pedido) return; // outro porte foi clicado nesse meio-tempo
+        const primeira = !img.dataset.atual;
+        img.dataset.atual = src;
+        img.src = src;
+        fig.classList.remove("empty");
+        if (!primeira && !reduceMotion) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350, easing: "ease" });
+      };
+      teste.onerror = () => {
+        fotosQueFalharam.add(src);
+        tentar();
+      };
+      teste.src = src;
+    };
+    tentar();
+  }
+
   function atualizarPrecos() {
     const porte = CONFIG.portes.find((p) => p.id === porteAtual);
+    lista.querySelectorAll("[data-foto]").forEach((img) => mostrarFoto(img, CONFIG.servicos[img.dataset.foto]));
     lista.querySelectorAll("[data-porte-nome]").forEach((el) => (el.textContent = porte.nome.toLowerCase()));
     lista.querySelectorAll("[data-preco]").forEach((el) => {
       const s = CONFIG.servicos[el.dataset.preco];
@@ -113,7 +146,7 @@
     lista.querySelectorAll("[data-servico]").forEach((a) => {
       const s = CONFIG.servicos[a.dataset.servico];
       a.href = waLink(
-        `Olá, ${CONFIG.nome}! Vi seu site e gostaria de agendar:\n\n🐾 *${s.nome}*\n📏 Porte: ${porte.nome} (${porte.detalhe})\n💰 Valor: ${brl(s.precos[porteAtual])}\n\nQual horário você tem disponível?`
+        `Olá, ${CONFIG.nome}! Vi seu site e gostaria de agendar:\n\n🐾 *${s.nome}*\n📏 Porte: ${porte.nome} (${porte.detalhe})\n💰 Valor: ${s.aPartirDe ? "a partir de " : ""}${brl(s.precos[porteAtual])}\n\nQual horário você tem disponível?`
       );
     });
   }
