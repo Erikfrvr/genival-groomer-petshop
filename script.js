@@ -78,7 +78,7 @@
   lista.innerHTML = CONFIG.servicos
     .map(
       (s, i) => `
-    <article class="service reveal ${s.destaque ? "service--featured" : ""}" style="--d:${(i % 3) * 80}ms">
+    <article class="service reveal ${s.destaque ? "service--featured" : ""}">
       <figure class="ph service__photo" data-label="${esc(s.nome)}">
         <img data-foto="${i}" src="${esc(s.foto)}" alt="${esc(s.nome)}" loading="lazy" />
         ${s.destaque ? `<span class="service__tag"><svg><use href="#i-star"/></svg>${esc(s.destaque)}</span>` : ""}
