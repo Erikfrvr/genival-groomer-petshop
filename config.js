@@ -45,7 +45,8 @@ const CONFIG = {
       fotos: { p: "images/banho-tosa-higienica-p.jpg", m: "images/banho-tosa-higienica-m.jpg", g: "images/banho-tosa-higienica-g.jpg" },
       descricao: "O banho completo + aparo das patinhas, barriga e região íntima. Mais conforto e higiene no dia a dia.",
       duracao: "1h30 a 2h",
-      precos: { p: 60, m: 75, g: 95 },
+      precos: { p: 80, m: 100, g: 140 },
+      aPartirDe: true,
       destaque: "Mais pedido",
     },
     {
