@@ -184,12 +184,22 @@
   const float = document.querySelector(".wa-float");
   const hero = document.querySelector(".hero");
   const footer = document.querySelector(".footer");
+  const precosInicio = document.getElementById("size-picker");
+  const precosFim = document.getElementById("servicos-lista");
   let footerVisivel = false;
+
+  // Some enquanto o seletor de porte e os cards de preço passam pela
+  // faixa de baixo da tela (onde fica o botão), para não tampar os valores
+  const sobreOsPrecos = () => {
+    const faixa = window.innerHeight - 110;
+    return precosInicio.getBoundingClientRect().top < window.innerHeight &&
+           precosFim.getBoundingClientRect().bottom > faixa;
+  };
 
   const onScroll = () => {
     nav.classList.toggle("nav--scrolled", window.scrollY > 10);
     const passouHero = window.scrollY > hero.offsetHeight * 0.6;
-    float.classList.toggle("wa-float--show", passouHero && !footerVisivel);
+    float.classList.toggle("wa-float--show", passouHero && !footerVisivel && !sobreOsPrecos());
   };
   new IntersectionObserver(([e]) => {
     footerVisivel = e.isIntersecting;
