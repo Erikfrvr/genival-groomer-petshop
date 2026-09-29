@@ -28,11 +28,13 @@ const CONFIG = {
     { id: "g", nome: "Grande", detalhe: "acima de 25 kg", icone: "🦮" },
   ],
 
-  // Serviços principais — coloque as fotos na pasta /images com o mesmo nome
+  // Serviços principais — fotos na pasta /images
+  //   fotos: { p, m, g } -> foto de cada porte (troca quando o cliente escolhe o porte)
+  //   foto: "..."      -> foto usada quando o porte não tem foto própria
   servicos: [
     {
       nome: "Banho",
-      foto: "images/banho.jpg",
+      fotos: { p: "images/banho-p.jpg", m: "images/banho-m.jpg", g: "images/banho-g.jpg" },
       descricao: "Shampoo e condicionador para cada tipo de pelo, secagem cuidadosa, escovação, perfume, limpeza de ouvidos e corte de unhas.",
       duracao: "1h a 1h30",
       precos: { p: 60, m: 90, g: 130 },
@@ -40,7 +42,7 @@ const CONFIG = {
     },
     {
       nome: "Banho + Tosa Higiênica",
-      foto: "images/banho-tosa-higienica.jpg",
+      fotos: { p: "images/banho-tosa-higienica-p.jpg", m: "images/banho-tosa-higienica-m.jpg", g: "images/banho-tosa-higienica-g.jpg" },
       descricao: "O banho completo + aparo das patinhas, barriga e região íntima. Mais conforto e higiene no dia a dia.",
       duracao: "1h30 a 2h",
       precos: { p: 60, m: 75, g: 95 },
@@ -48,22 +50,25 @@ const CONFIG = {
     },
     {
       nome: "Banho + Tosa na Máquina",
-      foto: "images/tosa-maquina.jpg",
+      fotos: { p: "images/tosa-maquina-p.jpg", m: "images/tosa-maquina-m.jpg", g: "images/tosa-maquina-g.jpg" },
       descricao: "Banho completo + tosa uniforme em todo o corpo na altura que você preferir. Prático e fresquinho.",
       duracao: "2h a 2h30",
-      precos: { p: 80, m: 100, g: 130 },
+      precos: { p: 110, m: 130, g: 180 },
+      aPartirDe: true,
     },
     {
       nome: "Banho + Tosa na Tesoura",
-      foto: "images/tosa-tesoura.jpg",
+      foto: "images/tosa-tesoura-m.jpg", // usada nos portes sem foto própria
+      fotos: { p: "images/tosa-tesoura-p.jpg", m: "images/tosa-tesoura-m.jpg" },
       descricao: "Acabamento artesanal feito à mão, respeitando o padrão da raça ou o estilo que você quiser.",
       duracao: "2h30 a 3h",
-      precos: { p: 100, m: 125, g: 160 },
+      precos: { p: 150, m: 180, g: 250 },
+      aPartirDe: true,
       destaque: "Premium",
     },
     {
       nome: "Banho e Tosa Bebê",
-      foto: "images/tosa-bebe.jpg",
+      fotos: { p: "images/tosa-bebe-p.jpg", m: "images/tosa-bebe-m.jpg", g: "images/tosa-bebe-g.jpg" },
       descricao: "O primeiro banho e tosa do filhote, com produtos suaves e muita paciência para ele se acostumar sem medo.",
       duracao: "1h a 1h30",
       precos: { p: 50, m: 60, g: 75 },
@@ -73,14 +78,14 @@ const CONFIG = {
       foto: "images/hidratacao.jpg",
       descricao: "Máscara hidratante que deixa o pelo macio, brilhante e fácil de pentear. Adicione a qualquer banho.",
       duracao: "+ 15 min",
-      precos: { p: 25, m: 30, g: 40 },
+      precos: { p: 30, m: 40, g: 60 },
     },
   ],
 
   // Adicionais (preço único). Use "a partir de" quando variar.
   adicionais: [
     { nome: "Tosa higiênica avulsa", preco: 30, aPartirDe: true, icone: "✂️" },
-    { nome: "Corte de unhas avulso", preco: 15, icone: "💅" },
+    { nome: "Corte de unhas avulso", preco: 30, aPartirDe: true, icone: "💅" },
     { nome: "Escovação de dentes", preco: 15, icone: "🦷" },
     { nome: "Desembolo de nós", preco: 20, aPartirDe: true, icone: "🪮" },
     { nome: "Remoção de subpelo", preco: 30, aPartirDe: true, icone: "🌬️" },

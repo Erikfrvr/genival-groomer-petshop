@@ -74,13 +74,14 @@
   });
 
   /* ---------- Cards de serviços ---------- */
+  const fotoDe = (s, porte) => (s.fotos && s.fotos[porte]) || s.foto;
   const lista = document.getElementById("servicos-lista");
   lista.innerHTML = CONFIG.servicos
     .map(
       (s, i) => `
     <article class="service reveal ${s.destaque ? "service--featured" : ""}">
       <figure class="ph service__photo" data-label="${esc(s.nome)}">
-        <img data-foto="${i}" src="${esc(s.foto)}" alt="${esc(s.nome)}" loading="lazy" />
+        <img data-foto="${i}" src="${esc(fotoDe(s, porteAtual) || "")}" alt="${esc(s.nome)}" loading="lazy" />
         ${s.destaque ? `<span class="service__tag"><svg><use href="#i-star"/></svg>${esc(s.destaque)}</span>` : ""}
 
       </figure>
@@ -116,36 +117,26 @@
   });
 
   /* ---------- Foto do serviço conforme o porte ----------
-     Tenta images/banho-g.jpg (porte grande); se não existir, usa images/banho.jpg */
-  const fotosQueFalharam = new Set();
-  const fotoDoPorte = (s) => s.foto.replace(/(\.\w+)$/, `-${porteAtual}$1`);
-
+     Usa fotos[porte] do config.js; se o porte não tiver foto própria, usa "foto" */
   function mostrarFoto(img, s) {
     const fig = img.parentNode;
-    const tentativas = [fotoDoPorte(s), s.foto].filter((f) => !fotosQueFalharam.has(f));
-    const pedido = (img.dataset.pedido = (+img.dataset.pedido || 0) + 1);
-    const tentar = () => {
-      const src = tentativas.shift();
-      if (!src) return fig.classList.add("empty");
-      if (src === img.dataset.atual) return;
-      // Carrega "por fora" e só troca a foto do card quando ela existir
-      const teste = new Image();
-      teste.onload = () => {
-        if (+img.dataset.pedido !== pedido) return; // outro porte foi clicado nesse meio-tempo
-        const primeira = !img.dataset.atual;
-        img.dataset.atual = src;
-        img.src = src;
-        fig.classList.remove("empty");
-        if (!primeira && !reduceMotion) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350, easing: "ease" });
-      };
-      teste.onerror = () => {
-        fotosQueFalharam.add(src);
-        tentar();
-      };
-      teste.src = src;
-    };
-    tentar();
+    const src = fotoDe(s, porteAtual);
+    if (!src) return fig.classList.add("empty");
+    if (img.getAttribute("src") === src) return;
+    img.src = src;
+    if (!reduceMotion) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 350, easing: "ease" });
   }
+
+  lista.querySelectorAll("[data-foto]").forEach((img) => {
+    img.addEventListener("error", () => img.parentNode.classList.add("empty"));
+    img.addEventListener("load", () => img.parentNode.classList.remove("empty"));
+  });
+
+  // Depois que a página carregar, baixa as fotos dos outros portes para a troca ser instantânea
+  window.addEventListener("load", () => {
+    const fotos = new Set(CONFIG.servicos.flatMap((s) => Object.values(s.fotos || {})));
+    fotos.forEach((src) => (new Image().src = src));
+  });
 
   function atualizarPrecos() {
     const porte = CONFIG.portes.find((p) => p.id === porteAtual);
