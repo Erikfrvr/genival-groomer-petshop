@@ -30,7 +30,7 @@ const CONFIG = {
 
   // Serviços principais — fotos na pasta /images
   //   fotos: { p, m, g } -> foto de cada porte (troca quando o cliente escolhe o porte)
-  //   foto: "..."      -> foto usada quando o porte não tem foto própria
+  //   foto: "..."      -> foto reserva, usada se a foto do porte não existir
   servicos: [
     {
       nome: "Banho",
@@ -58,8 +58,8 @@ const CONFIG = {
     },
     {
       nome: "Banho + Tosa na Tesoura",
-      foto: "images/tosa-tesoura-m.jpg", // usada nos portes sem foto própria
-      fotos: { p: "images/tosa-tesoura-p.jpg", m: "images/tosa-tesoura-m.jpg" },
+      foto: "images/tosa-tesoura-m.jpg", // usada enquanto a foto do porte não existir
+      fotos: { p: "images/tosa-tesoura-p.jpg", m: "images/tosa-tesoura-m.jpg", g: "images/tosa-tesoura-g.jpg" },
       descricao: "Acabamento artesanal feito à mão, respeitando o padrão da raça ou o estilo que você quiser.",
       duracao: "2h30 a 3h",
       precos: { p: 150, m: 180, g: 250 },
@@ -75,7 +75,8 @@ const CONFIG = {
     },
     {
       nome: "Hidratação",
-      foto: "images/hidratacao.jpg",
+      foto: "images/hidratacao.jpg", // usada enquanto a foto do porte não existir
+      fotos: { p: "images/hidratacao-p.jpg", m: "images/hidratacao-m.jpg", g: "images/hidratacao-g.jpg" },
       descricao: "Máscara hidratante que deixa o pelo macio, brilhante e fácil de pentear. Adicione a qualquer banho.",
       duracao: "+ 15 min",
       precos: { p: 30, m: 40, g: 60 },

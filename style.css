@@ -889,7 +889,7 @@ p { margin: 0; text-wrap: pretty; }
 .gallery__grid .ph { border-radius: 20px; }
 .gallery__grid img { transition: transform 0.6s ease; }
 .g-1 { grid-row: span 2; }
-.g-6 { grid-column: span 2; }
+.g-6, .g-7 { grid-column: span 2; }
 
 /* ---------- Dúvidas ---------- */
 .faq__wrap { max-width: 760px; }
@@ -1120,8 +1120,9 @@ p { margin: 0; text-wrap: pretty; }
   .gallery__grid { grid-template-columns: repeat(3, 1fr); }
   .g-1 { grid-column: 1; grid-row: 1 / span 2; }
   .g-2 { grid-column: 2; grid-row: 1; }
-  .g-3 { grid-column: 3; grid-row: 1 / span 2; }
+  .g-3 { grid-column: 3; grid-row: 1; }
   .g-4 { grid-column: 2; grid-row: 2; }
+  .g-7 { grid-column: 3; grid-row: 2; }
   .g-5 { grid-column: 1; grid-row: 3; }
   .g-6 { grid-column: 2 / span 2; grid-row: 3; }
   .gallery__grid .ph:hover img { transform: scale(1.06); }

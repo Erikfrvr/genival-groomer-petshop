@@ -128,7 +128,12 @@
   }
 
   lista.querySelectorAll("[data-foto]").forEach((img) => {
-    img.addEventListener("error", () => img.parentNode.classList.add("empty"));
+    // Foto do porte ainda não existe: usa a foto reserva ("foto") ou mostra o espaço decorado
+    img.addEventListener("error", () => {
+      const reserva = CONFIG.servicos[img.dataset.foto].foto;
+      if (reserva && img.getAttribute("src") !== reserva) img.src = reserva;
+      else img.parentNode.classList.add("empty");
+    });
     img.addEventListener("load", () => img.parentNode.classList.remove("empty"));
   });
 

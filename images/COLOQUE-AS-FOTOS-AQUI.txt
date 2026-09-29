@@ -2,20 +2,20 @@ Coloque as fotos nesta pasta com EXATAMENTE estes nomes (tudo minúsculo, .jpg):
 
 perfil.jpg                 -> foto dele com um pet (topo do site) — de preferência em pé/vertical
 sobre.jpg                  -> foto dele trabalhando (seção "Sobre")
-galeria-1.jpg ... galeria-6.jpg -> fotos dos pets atendidos
+galeria-1.jpg ... galeria-7.jpg -> fotos dos pets atendidos
 
 FOTOS DOS SERVIÇOS — uma por porte (-p pequeno, -m médio, -g grande).
 A foto muda quando o cliente escolhe o porte:
   banho-p.jpg / banho-m.jpg / banho-g.jpg
   banho-tosa-higienica-p.jpg / -m.jpg / -g.jpg
   tosa-maquina-p.jpg / -m.jpg / -g.jpg
-  tosa-tesoura-p.jpg / -m.jpg          (FALTA tosa-tesoura-g.jpg)
+  tosa-tesoura-p.jpg / -m.jpg / -g.jpg
   tosa-bebe-p.jpg / -m.jpg / -g.jpg
-  hidratacao.jpg                       (FALTAM hidratacao-p/-m/-g.jpg)
+  hidratacao-p.jpg / -m.jpg / -g.jpg  (reserva: hidratacao.jpg)
 Quem diz qual foto vai em cada porte é o config.js (campo "fotos").
 Ao adicionar uma foto nova, coloque o nome dela lá, ex.:
   fotos: { p: "images/hidratacao-p.jpg", m: "images/hidratacao-m.jpg", g: "images/hidratacao-g.jpg" },
-Porte sem foto usa a foto do campo "foto".
+Se a foto do porte ainda não existir, o site usa a foto do campo "foto".
 Formato ideal: horizontal (16:10 ou 16:9).
 
 capa-link.jpg              -> JÁ CRIADA com a logo (aparece quando o link é enviado no WhatsApp)
