@@ -11,7 +11,7 @@ A foto muda quando o cliente escolhe o porte:
   tosa-maquina-p.jpg / -m.jpg / -g.jpg
   tosa-tesoura-p.jpg / -m.jpg / -g.jpg
   tosa-bebe-p.jpg / -m.jpg / -g.jpg
-  hidratacao-p.jpg / -m.jpg / -g.jpg  (reserva: hidratacao.jpg)
+  hidratacao-p.jpg / -m.jpg / -g.jpg
 Quem diz qual foto vai em cada porte é o config.js (campo "fotos").
 Ao adicionar uma foto nova, coloque o nome dela lá, ex.:
   fotos: { p: "images/hidratacao-p.jpg", m: "images/hidratacao-m.jpg", g: "images/hidratacao-g.jpg" },

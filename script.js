@@ -93,7 +93,7 @@
         <p>${esc(s.descricao)}</p>
         <div class="service__foot">
           <div class="price">
-            <small>Porte <span data-porte-nome></span>${s.aPartirDe ? " · a partir de" : ""}</small>
+            <small>Porte <span data-porte-nome></span>${s.aPartirDe ? ' · <span class="nowrap">a partir de</span>' : ""}</small>
             <strong data-preco="${i}"></strong>
           </div>
           <a class="btn btn--wa btn--sm" data-servico="${i}" target="_blank" rel="noopener noreferrer">

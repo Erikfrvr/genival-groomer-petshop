@@ -252,19 +252,6 @@ p { margin: 0; text-wrap: pretty; }
   gap: 0.6rem;
   min-width: 0;
 }
-.brand__icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
-  background: var(--brand);
-  color: #fff;
-  transform: rotate(-8deg);
-  box-shadow: 0 6px 14px -4px rgba(139, 46, 46, 0.6);
-  flex-shrink: 0;
-}
-.brand__icon svg { width: 24px; height: 24px; }
 .brand__text { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
 .brand__text strong {
   font-family: var(--font-display);
@@ -687,6 +674,7 @@ p { margin: 0; text-wrap: pretty; }
   padding-top: 0.9rem;
   border-top: 1px dashed var(--line);
 }
+.price .nowrap { white-space: nowrap; }
 .price small {
   display: block;
   font-size: 0.75rem;

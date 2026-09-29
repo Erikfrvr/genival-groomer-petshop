@@ -58,7 +58,6 @@ const CONFIG = {
     },
     {
       nome: "Banho + Tosa na Tesoura",
-      foto: "images/tosa-tesoura-m.jpg", // usada enquanto a foto do porte não existir
       fotos: { p: "images/tosa-tesoura-p.jpg", m: "images/tosa-tesoura-m.jpg", g: "images/tosa-tesoura-g.jpg" },
       descricao: "Acabamento artesanal feito à mão, respeitando o padrão da raça ou o estilo que você quiser.",
       duracao: "2h30 a 3h",
@@ -75,7 +74,6 @@ const CONFIG = {
     },
     {
       nome: "Hidratação",
-      foto: "images/hidratacao.jpg", // usada enquanto a foto do porte não existir
       fotos: { p: "images/hidratacao-p.jpg", m: "images/hidratacao-m.jpg", g: "images/hidratacao-g.jpg" },
       descricao: "Máscara hidratante que deixa o pelo macio, brilhante e fácil de pentear. Adicione a qualquer banho.",
       duracao: "+ 15 min",
