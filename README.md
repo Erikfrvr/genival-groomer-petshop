@@ -4,8 +4,10 @@ Site de uma página só, feito para o cliente **ver o preço e agendar em 1 minu
 Hospedado de graça no **GitHub Pages**:
 <https://erikfrvr.github.io/genival-groomer-petshop/>
 
-O cliente escolhe porte → serviço → extras → dia/período, vê o total na hora e toca em
-**Agendar pelo WhatsApp**: a mensagem já chega pronta para o Genival com tudo o que foi escolhido.
+O cliente escolhe porte → serviço → extras, vê o total na hora e toca em
+**Enviar pedido no WhatsApp**: a mensagem já chega pronta para o Genival com tudo o que foi escolhido.
+O cliente **não escolhe dia/horário** no site — o Genival responde com os horários livres, por ordem
+de chegada. Assim duas pessoas nunca marcam o mesmo horário.
 
 ## Editar preços, serviços e contatos
 
@@ -14,13 +16,16 @@ Tudo fica no arquivo **`config.js`**:
 | Campo | O que é |
 |---|---|
 | `whatsapp`, `whatsapp2`, `email`, `endereco` | Contatos (WhatsApp só com dígitos: `55` + DDD + número). Os agendamentos vão para o `whatsapp` |
-| `diasDeAtendimento` | Dias que aparecem para escolher (`0` = domingo … `6` = sábado) |
 | `servicos` → `precos` | Valor de cada porte (`p`, `m`, `g`). `aPartirDe: true` mostra "a partir de" |
 | `servicos` → `resumo`, `duracao`, `destaque` | Texto curto, tempo e etiqueta opcional ("Mais pedido") |
 | `servicos` → `fotos` | Foto de cada porte — ela troca quando o cliente escolhe o porte |
 | `adicionais` | Extras: `preco` (valor único), `precos` (por porte) ou `preco: 0` (mostra "Cortesia") |
 
 As **dúvidas** (formas de pagamento etc.) e a frase do **sobre** ficam no `index.html`.
+
+## Cores
+
+As cores (vinho e dourado da logo, rosa e verde de apoio) ficam no topo do `style.css`.
 
 ## Fotos
 
@@ -41,7 +46,7 @@ As fotos originais ficam guardadas em `images/originais/` (essa pasta não vai p
 
 ## Depois de mudar algo
 
-No `index.html`, aumente o número em `?v=` (ex.: `?v=4` → `?v=5`) nas linhas do
+No `index.html`, aumente o número em `?v=` (ex.: `?v=5` → `?v=6`) nas linhas do
 `style.css`, `config.js` e `script.js`. Assim quem já abriu o site recebe a versão nova
 em vez da guardada no navegador.
 

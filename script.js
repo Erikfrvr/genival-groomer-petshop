@@ -48,7 +48,7 @@
   /* =========================================================
      AGENDAMENTO
      ========================================================= */
-  const escolha = { porte: C.portes[0].id, servico: -1, extras: new Set(), dia: -1, periodo: "", pet: "" };
+  const escolha = { porte: C.portes[0].id, servico: -1, extras: new Set(), pet: "" };
 
   const precoDe = (item) => (item.precos ? item.precos[escolha.porte] : item.preco) || 0;
   const precoTexto = (item) => {
@@ -143,50 +143,9 @@
     atualizarResumo();
   });
 
-  /* ---------- 4. Dia, período e nome do pet ---------- */
-  const SEMANA = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
-  const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
-  const dias = [];
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-  for (let i = 0; dias.length < 12 && i < 40; i++) {
-    const d = new Date(hoje);
-    d.setDate(hoje.getDate() + i);
-    if (i === 0 && new Date().getHours() >= 17) continue; // fim do dia: não oferece "hoje"
-    if (!C.diasDeAtendimento.includes(d.getDay())) continue;
-    const rotulo = i === 0 ? "Hoje" : i === 1 ? "Amanhã" : SEMANA[d.getDay()].slice(0, 3);
-    const ddmm = `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
-    dias.push({ d, rotulo, texto: `${i < 2 ? rotulo.toLowerCase() : SEMANA[d.getDay()]}, ${ddmm}` });
-  }
-
-  const diasEl = $("#dias");
-  diasEl.innerHTML = dias
-    .map(
-      (x, i) => `
-      <button type="button" class="dia" data-dia="${i}" aria-pressed="false" aria-label="${esc(x.texto)}">
-        <small>${esc(x.rotulo)}</small><strong>${x.d.getDate()}</strong><span>${MESES[x.d.getMonth()]}</span>
-      </button>`
-    )
-    .join("");
-
-  diasEl.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-dia]");
-    if (!b) return;
-    const i = +b.dataset.dia;
-    escolha.dia = escolha.dia === i ? -1 : i;
-    marcar(diasEl, escolha.dia === -1 ? null : b);
-    atualizarResumo();
-  });
-
-  const periodosEl = $(".periodos");
-  periodosEl.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-periodo]");
-    if (!b) return;
-    escolha.periodo = escolha.periodo === b.dataset.periodo ? "" : b.dataset.periodo;
-    marcar(periodosEl, escolha.periodo ? b : null);
-    atualizarResumo();
-  });
-
+  /* ---------- Nome do pet (opcional) ----------
+     Não tem escolha de dia: o Genival responde com os horários livres,
+     por ordem de chegada — assim duas pessoas nunca marcam o mesmo horário. */
   $("#pet").addEventListener("input", (e) => {
     escolha.pet = e.target.value.trim();
     atualizarResumo();
@@ -269,8 +228,6 @@
     const itens = (servico ? [servico] : []).concat(extras);
     const total = itens.reduce((t, it) => t + precoDe(it), 0);
     const aPartir = itens.some((it) => it.aPartirDe);
-    const dia = dias[escolha.dia];
-    const quando = [dia && dia.texto, escolha.periodo].filter(Boolean).join(" · ");
 
     // Lista do resumo
     const rows = [linha("Porte", `${porte.nome} · ${porte.detalhe}`)];
@@ -278,8 +235,6 @@
     if (extras.length) {
       rows.push(linha("Extras", extras.map((a) => a.nome).join(", "), "+" + brl(extras.reduce((t, a) => t + precoDe(a), 0))));
     }
-    if (quando) rows.push(linha("Quando", quando.charAt(0).toUpperCase() + quando.slice(1)));
-    if (escolha.pet) rows.push(linha("Pet", escolha.pet));
     lista.replaceChildren(...rows);
 
     aPartirEl.hidden = !aPartir;
@@ -292,7 +247,7 @@
 
       barRotulo.textContent = "Banho e tosa a partir de";
       barValor.textContent = brl(menorPreco);
-      barBtn.className = "btn btn--primary";
+      barBtn.className = "btn btn--gold";
       barBtn.innerHTML = "<span>Agendar</span>";
       linkInterno(barBtn, "#passo-servico");
       totalAnterior = null;
@@ -305,12 +260,11 @@
     msg.push(`*Porte:* ${porte.nome} (${porte.detalhe})`);
     if (servico) msg.push(`*Serviço:* ${servico.nome} — ${precoTexto(servico)}`);
     if (extras.length) msg.push(`*Extras:* ${extras.map((a) => `${a.nome} (${precoTexto(a)})`).join(", ")}`);
-    if (quando) msg.push(`*Preferência:* ${quando}`);
-    msg.push(`*Total estimado:* ${aPartir ? "a partir de " : ""}${brl(total)}`, "", "Tem horário disponível?");
+    msg.push(`*Total estimado:* ${aPartir ? "a partir de " : ""}${brl(total)}`, "", "Quais dias e horários você tem livres?");
     const link = waLink(msg.join("\n"));
 
     totalEl.textContent = brl(total);
-    resumoBtn.lastElementChild.textContent = "Agendar pelo WhatsApp";
+    resumoBtn.lastElementChild.textContent = "Enviar pedido no WhatsApp";
     linkAberto(resumoBtn, link);
 
     const nome = servico ? servico.nome : extras.map((a) => a.nome).join(" + ");

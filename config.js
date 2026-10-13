@@ -20,9 +20,6 @@ const CONFIG = {
   // Mensagem dos botões "Falar no WhatsApp"
   mensagemPadrao: "Olá, Genival! Vim pelo site e gostaria de agendar um horário para o meu pet 🐾",
 
-  // Dias que aparecem para escolher no agendamento (0 = domingo, 1 = segunda ... 6 = sábado)
-  diasDeAtendimento: [1, 2, 3, 4, 5, 6],
-
   portes: [
     { id: "p", nome: "Pequeno", detalhe: "até 10 kg" },
     { id: "m", nome: "Médio", detalhe: "10 a 25 kg" },
