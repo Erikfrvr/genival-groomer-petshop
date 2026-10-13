@@ -17,15 +17,16 @@ Tudo fica no arquivo **`config.js`**:
 |---|---|
 | `whatsapp`, `whatsapp2`, `email`, `endereco` | Contatos (WhatsApp só com dígitos: `55` + DDD + número). Os agendamentos vão para o `whatsapp` |
 | `servicos` → `precos` | Valor de cada porte (`p`, `m`, `g`). `aPartirDe: true` mostra "a partir de" |
-| `servicos` → `resumo`, `duracao`, `destaque` | Texto curto, tempo e etiqueta opcional ("Mais pedido") |
-| `servicos` → `fotos` | Foto de cada porte — ela troca quando o cliente escolhe o porte |
+| `servicos` → `resumo`, `destaque` | Texto curto e etiqueta opcional ("Mais pedido") |
+| `servicos` → `fotos` | Foto de cada porte: ela troca quando o cliente escolhe o porte |
+| `servicos` → `foco` | Onde o cão está em cada foto (`0%` esquerda, `50%` meio, `100%` direita), para ele ficar centralizado no quadrinho do celular |
 | `adicionais` | Extras: `preco` (valor único), `precos` (por porte) ou `preco: 0` (mostra "Cortesia") |
 
 As **dúvidas** (formas de pagamento etc.) e a frase do **sobre** ficam no `index.html`.
 
 ## Cores
 
-As cores (vinho e dourado da logo, rosa e verde de apoio) ficam no topo do `style.css`.
+As cores (ameixa, framboesa e o dourado da logo, com lilás e menta de apoio) ficam no topo do `style.css`.
 
 ## Fotos
 

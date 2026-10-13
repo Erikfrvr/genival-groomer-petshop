@@ -1,5 +1,5 @@
 /* =========================================================
-   CONFIGURAÇÕES DO SITE — edite só este arquivo
+   CONFIGURAÇÕES DO SITE: edite só este arquivo
    para trocar contatos, serviços, preços e dias de atendimento.
    ========================================================= */
 
@@ -12,7 +12,7 @@ const CONFIG = {
   // Contatos que aparecem no fim da página
   whatsapp2: "5511939617274",
   email: "sgenivalramos@gmail.com",
-  endereco: "Rua Dona Elfrida, 252 - Santana, São Paulo - SP",
+  endereco: "Rua Dona Elfrida, 252, Santana, São Paulo, SP",
 
   // Ano em que começou na área pet (os "anos de experiência" são calculados sozinhos)
   naAreaPetDesde: 2001,
@@ -29,48 +29,50 @@ const CONFIG = {
   // Serviços principais (o cliente escolhe um)
   //   precos: valor de cada porte · aPartirDe: true mostra "a partir de"
   //   fotos: uma por porte (troca quando o cliente escolhe o porte)
+  //   foco: onde o cão está na foto, da esquerda (0%) para a direita (100%).
+  //         Deixa o cão centralizado no quadrinho do celular. Sem foco = 50% (meio)
   //   destaque: etiqueta opcional ("Mais pedido", "Premium"...)
   servicos: [
     {
       nome: "Banho",
       resumo: "Shampoo certo para o pelo, secagem, escovação, ouvidos e unhas.",
-      duracao: "1h a 1h30",
       precos: { p: 60, m: 90, g: 130 },
       aPartirDe: true,
       fotos: { p: "images/banho-p.webp", m: "images/banho-m.webp", g: "images/banho-g.webp" },
+      foco: { p: "46%", m: "56%", g: "42%" },
     },
     {
       nome: "Banho + Tosa Higiênica",
       resumo: "Banho completo + aparo de patinhas, barriga e região íntima.",
-      duracao: "1h30 a 2h",
       precos: { p: 80, m: 100, g: 140 },
       aPartirDe: true,
       destaque: "Mais pedido",
       fotos: { p: "images/banho-tosa-higienica-p.webp", m: "images/banho-tosa-higienica-m.webp", g: "images/banho-tosa-higienica-g.webp" },
+      foco: { p: "42%", m: "36%", g: "14%" },
     },
     {
       nome: "Banho + Tosa na Máquina",
       resumo: "Banho completo + tosa uniforme no corpo todo, na altura que você quiser.",
-      duracao: "2h a 2h30",
       precos: { p: 110, m: 130, g: 180 },
       aPartirDe: true,
       fotos: { p: "images/tosa-maquina-p.webp", m: "images/tosa-maquina-m.webp", g: "images/tosa-maquina-g.webp" },
+      foco: { p: "30%", m: "72%", g: "14%" },
     },
     {
       nome: "Banho + Tosa na Tesoura",
       resumo: "Banho completo + acabamento feito à mão, no padrão da raça ou do seu jeito.",
-      duracao: "2h30 a 3h",
       precos: { p: 150, m: 180, g: 250 },
       aPartirDe: true,
       destaque: "Premium",
       fotos: { p: "images/tosa-tesoura-p.webp", m: "images/tosa-tesoura-m.webp", g: "images/tosa-tesoura-g.webp" },
+      foco: { p: "46%", m: "42%", g: "62%" },
     },
     {
       nome: "Banho e Tosa Bebê",
       resumo: "O primeiro banho e tosa do filhote, com produtos suaves e muita paciência.",
-      duracao: "1h a 1h30",
       precos: { p: 50, m: 60, g: 75 },
       fotos: { p: "images/tosa-bebe-p.webp", m: "images/tosa-bebe-m.webp", g: "images/tosa-bebe-g.webp" },
+      foco: { p: "52%", m: "64%", g: "46%" },
     },
   ],
 

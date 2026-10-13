@@ -35,7 +35,7 @@
   $$("[data-wa]").forEach((el) => (el.href = waLink(C.mensagemPadrao)));
   $$("[data-wa2]").forEach((el) => (el.href = waLink(C.mensagemPadrao, C.whatsapp2)));
 
-  const fone = (n) => soNumeros(n).replace(/^55(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
+  const fone = (n) => soNumeros(n).replace(/^55(\d{2})(\d{4,5})(\d{4})$/, "($1) $2 $3");
   $$("[data-fone]").forEach((el) => (el.textContent = fone(C[el.dataset.fone])));
   $$("[data-email]").forEach((el) => (el.href = `mailto:${encodeURI(C.email)}`));
   $$("[data-email-texto]").forEach((el) => (el.textContent = C.email));
@@ -84,18 +84,21 @@
 
   /* ---------- 2. Serviços ---------- */
   const fotoDe = (s) => (s.fotos && s.fotos[escolha.porte]) || s.foto || "";
+  // Posição do cão na foto, para ele ficar centralizado no quadrinho (via CSSOM: a CSP bloqueia style="")
+  const focar = (img, s) => (img.style.objectPosition = `${(s.foco && s.foco[escolha.porte]) || "50%"} 50%`);
   const servicosEl = $("#servicos");
-  let etiquetas = 0; // alterna a cor das etiquetas: amarela, roxa, amarela...
+  let etiquetas = 0; // alterna a cor das etiquetas: dourada, lilás, dourada...
   servicosEl.innerHTML = C.servicos
     .map(
       (s, i) => `
       <button type="button" class="svc" data-servico="${i}" aria-pressed="false">
         ${s.destaque ? `<span class="svc__tag${etiquetas++ % 2 ? " svc__tag--alt" : ""}">${esc(s.destaque)}</span>` : ""}
         <span class="svc__img"><img data-foto="${i}" src="${esc(fotoDe(s))}" alt="" width="560" height="350" loading="lazy" /></span>
-        <span class="svc__name">${esc(s.nome)}</span>
-        <span class="svc__desc">${esc(s.resumo || "")}</span>
-        <span class="svc__time"><svg><use href="#i-clock"/></svg>${esc(s.duracao || "")}</span>
-        <span class="svc__price"><small>${s.aPartirDe ? "a partir de" : "&nbsp;"}</small><strong data-preco="${i}"></strong></span>
+        <span class="svc__body">
+          <span class="svc__name">${esc(s.nome)}</span>
+          <span class="svc__desc">${esc(s.resumo || "")}</span>
+          <span class="svc__price">${s.aPartirDe ? "<small>a partir de</small>" : ""}<strong data-preco="${i}"></strong></span>
+        </span>
         <span class="svc__radio" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
       </button>`
     )
@@ -145,7 +148,7 @@
 
   /* ---------- Nome do pet (opcional) ----------
      Não tem escolha de dia: o Genival responde com os horários livres,
-     por ordem de chegada — assim duas pessoas nunca marcam o mesmo horário. */
+     por ordem de chegada, assim duas pessoas nunca marcam o mesmo horário. */
   $("#pet").addEventListener("input", (e) => {
     escolha.pet = e.target.value.trim();
     atualizarResumo();
@@ -164,8 +167,10 @@
       el.classList.toggle("free", v === 0);
     });
     servicosEl.querySelectorAll("[data-foto]").forEach((img) => {
-      const src = fotoDe(C.servicos[img.dataset.foto]);
+      const s = C.servicos[img.dataset.foto];
+      const src = fotoDe(s);
       if (!src) return img.parentNode.classList.add("noimg");
+      focar(img, s);
       if (img.getAttribute("src") === src) return;
       img.src = src;
       if (!reduceMotion) img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: "ease" });
@@ -240,7 +245,7 @@
     aPartirEl.hidden = !aPartir;
 
     if (!itens.length) {
-      totalEl.textContent = "—";
+      totalEl.textContent = brl(0);
       resumoBtn.setAttribute("aria-disabled", "true");
       resumoBtn.lastElementChild.textContent = "Escolha um serviço";
       linkInterno(resumoBtn, "#passo-servico");
@@ -258,7 +263,7 @@
     const msg = [`Olá, ${C.nome}! Vim pelo site e quero agendar 🐾`, ""];
     if (escolha.pet) msg.push(`*Pet:* ${escolha.pet}`);
     msg.push(`*Porte:* ${porte.nome} (${porte.detalhe})`);
-    if (servico) msg.push(`*Serviço:* ${servico.nome} — ${precoTexto(servico)}`);
+    if (servico) msg.push(`*Serviço:* ${servico.nome} (${precoTexto(servico)})`);
     if (extras.length) msg.push(`*Extras:* ${extras.map((a) => `${a.nome} (${precoTexto(a)})`).join(", ")}`);
     msg.push(`*Total estimado:* ${aPartir ? "a partir de " : ""}${brl(total)}`, "", "Quais dias e horários você tem livres?");
     const link = waLink(msg.join("\n"));
