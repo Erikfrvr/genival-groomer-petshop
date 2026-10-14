@@ -1,0 +1,2 @@
+# A trava de commit precisa de quebras de linha no formato Linux para funcionar em qualquer computador
+.githooks/* text eol=lf
