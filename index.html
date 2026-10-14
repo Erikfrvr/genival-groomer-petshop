@@ -5,12 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Genival Groomer Petshop · Banho &amp; Tosa em Santana, SP</title>
   <meta name="description" content="Banho e tosa com carinho em Santana, São Paulo. Veja os preços por porte e peça o horário do seu pet em 1 minuto pelo WhatsApp." />
-  <meta name="theme-color" content="#2c1050" />
+  <meta name="theme-color" content="#0f2240" />
 
-  <!-- Segurança: só permite carregar scripts, estilos, fontes e imagens do próprio site e do Google Fonts.
-       Se mudar o script inline abaixo (classe "js"), gere um novo hash sha256 para ele. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests" />
+  <!-- Segurança: só permite carregar scripts, estilos, fontes, imagens, o manifesto do app e o service worker do próprio site.
+       Se mudar o script inline abaixo (classes "js" e "is-app"), gere um novo hash sha256 para ele. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-0Wi5UPwQlhs1JM8RhcNXEqACqm2ZX1clLLFBhp7V3b0='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- App: deixa o site ser instalado na tela inicial do celular -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="application-name" content="Genival Pet" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Genival Pet" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <!-- Prévia do link no WhatsApp / redes sociais -->
   <meta property="og:type" content="website" />
@@ -26,11 +34,11 @@
 
   <link rel="icon" href="favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,144,700,100;1,144,700,100&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=6" />
-  <script>document.documentElement.classList.add("js")</script>
+  <link rel="preload" href="fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="style.css?v=9" />
+  <script>document.documentElement.className+=" js"+(navigator.standalone||matchMedia("(display-mode: standalone)").matches?" is-app":"")</script>
 
   <!-- Dados para o Google (aparece melhor nas buscas) -->
   <script type="application/ld+json">
@@ -74,6 +82,15 @@
     <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.6 7.5 12.5 7.5 12.5s7.5-6.9 7.5-12.5A7.5 7.5 0 0 0 12 2Zm0 10.3a2.8 2.8 0 1 1 0-5.6 2.8 2.8 0 0 1 0 5.6Z"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/></symbol>
     <symbol id="i-chev" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m-5-4.5 5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 0 1 13.7-5.6L20 8.7M20 4v4.7h-4.7M20 12a8 8 0 0 1-13.7 5.6L4 15.3M4 20v-4.7h4.7"/></symbol>
+    <symbol id="i-offline" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2.5 8.8a14 14 0 0 1 4.3-2.6M10.6 5.1a14 14 0 0 1 10.9 3.7M5.5 12.2a9.5 9.5 0 0 1 3.4-1.9M15.6 10.6a9.6 9.6 0 0 1 2.9 1.6M8.7 15.5a5 5 0 0 1 6.6 0M3 3l18 18"/></g><circle cx="12" cy="19.4" r="1.5" fill="currentColor"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 2 4.5 13.5h6l-1 8.5 9-11.5h-6l1-8.5Z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="18" cy="5.5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="m8.3 10.8 7.4-4M8.3 13.2l7.4 4"/></g></symbol>
+    <symbol id="i-share-ios" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11.5M8.2 6.8 12 3l3.8 3.8"/><path d="M8.5 10H7a2.5 2.5 0 0 0-2.5 2.5v6A2.5 2.5 0 0 0 7 21h10a2.5 2.5 0 0 0 2.5-2.5v-6A2.5 2.5 0 0 0 17 10h-1.5"/></g></symbol>
+    <symbol id="i-addhome" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M12 8v8M8 12h8"/></g></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></g></symbol>
   </svg>
 
   <!-- ============ TOPO ============ -->
@@ -88,6 +105,7 @@
         <a href="#sobre">Sobre</a>
         <a href="#fotos">Fotos</a>
         <a href="#duvidas">Dúvidas</a>
+        <a href="#app" class="link-app">App</a>
         <a href="#contato">Contato</a>
       </nav>
       <a class="btn btn--gold btn--sm" href="#agendar">Agendar</a>
@@ -109,7 +127,7 @@
             <img class="hello__img" src="images/avatar.webp" alt="" width="48" height="48" />
             <span><strong>Oi! Eu sou o Genival 👋</strong><small>Groomer há <span data-anos>25</span> anos · Santana, SP</small></span>
           </p>
-          <h1 class="reveal">Seu pet <em class="gold">lindo</em>, cheiroso e <em class="rose">feliz</em>.</h1>
+          <h1 class="reveal">Seu pet <em class="gold">lindo</em>, cheiroso e <em class="caramel">feliz</em>.</h1>
           <p class="lead reveal">Banho e tosa com carinho, paciência e produtos de qualidade. Veja os preços e peça seu horário em 1&nbsp;minuto.</p>
           <div class="hero__ctas reveal">
             <a class="btn btn--gold btn--lg" href="#agendar">Ver preços e agendar <svg><use href="#i-arrow"/></svg></a>
@@ -123,7 +141,7 @@
           </div>
           <img class="hero__seal" src="images/logo.webp" alt="Logo Genival Groomer Petshop" width="96" height="96" />
           <div class="chip chip--a">
-            <span class="chip__ico chip__ico--berry"><svg><use href="#i-paw"/></svg></span>
+            <span class="chip__ico chip__ico--brown"><svg><use href="#i-paw"/></svg></span>
             <span><strong>+250</strong><small>pets por mês</small></span>
           </div>
           <div class="chip chip--b">
@@ -134,7 +152,7 @@
       </div>
     </section>
 
-    <!-- Faixa dourada que corre -->
+    <!-- Faixa de couro que corre -->
     <div class="faixa" aria-hidden="true">
       <div class="faixa__band">
         <div class="faixa__track">
@@ -162,6 +180,13 @@
           <h2>Peça seu horário em <em class="swash">1 minuto</em></h2>
           <p>Escolha o porte e o serviço e veja o valor na hora. Você me envia o pedido pelo WhatsApp e eu respondo com os horários livres.</p>
         </header>
+
+        <!-- Aparece para quem já pediu antes (o último pedido fica salvo só neste aparelho) -->
+        <div class="repetir reveal" id="repetir" hidden>
+          <span class="repetir__ico"><svg><use href="#i-repeat"/></svg></span>
+          <p class="repetir__txt"><strong>Que bom te ver de novo!</strong><small id="repetir-texto"></small></p>
+          <button type="button" class="btn btn--navy btn--sm" id="repetir-btn">Repetir pedido</button>
+        </div>
 
         <div class="agenda__grid">
           <div class="steps">
@@ -213,13 +238,13 @@
           <span class="sticker"><svg><use href="#i-heart"/></svg>Amor por cada patinha</span>
         </div>
         <div class="sobre__text">
-          <span class="eyebrow eyebrow--violet reveal">Quem cuida do seu pet</span>
+          <span class="eyebrow eyebrow--navy reveal">Quem cuida do seu pet</span>
           <h2 class="reveal">Cuido do seu pet como se fosse <em class="swash">meu</em></h2>
           <p class="reveal">Baiano, na área pet desde <span data-desde>2001</span>. São mais de <strong><span data-anos>25</span> anos</strong> deixando cães lindos e cheirosos, sempre com calma e no tempo de cada um.</p>
           <ul class="perks">
-            <li class="reveal"><span class="perk__ico perk__ico--violet"><svg><use href="#i-drop"/></svg></span><span><strong>Produtos de qualidade</strong><small>Certos para cada tipo de pele e pelo</small></span></li>
-            <li class="reveal"><span class="perk__ico perk__ico--berry"><svg><use href="#i-heart"/></svg></span><span><strong>Paciência de sobra</strong><small>Medrosos, idosos e agitados no tempo deles</small></span></li>
-            <li class="reveal"><span class="perk__ico perk__ico--mint"><svg><use href="#i-shield"/></svg></span><span><strong>Higiene em 1º lugar</strong><small>Material limpo a cada atendimento</small></span></li>
+            <li class="reveal"><span class="perk__ico perk__ico--navy"><svg><use href="#i-drop"/></svg></span><span><strong>Produtos de qualidade</strong><small>Certos para cada tipo de pele e pelo</small></span></li>
+            <li class="reveal"><span class="perk__ico perk__ico--gold"><svg><use href="#i-heart"/></svg></span><span><strong>Paciência de sobra</strong><small>Medrosos, idosos e agitados no tempo deles</small></span></li>
+            <li class="reveal"><span class="perk__ico perk__ico--brown"><svg><use href="#i-shield"/></svg></span><span><strong>Higiene em 1º lugar</strong><small>Material limpo a cada atendimento</small></span></li>
           </ul>
         </div>
       </div>
@@ -254,7 +279,7 @@
     <section class="section duvidas" id="duvidas">
       <div class="container duvidas__wrap">
         <header class="head reveal">
-          <span class="eyebrow eyebrow--mint">Dúvidas</span>
+          <span class="eyebrow">Dúvidas</span>
           <h2>Perguntas <em class="swash">rápidas</em></h2>
         </header>
         <div class="faq">
@@ -281,6 +306,55 @@
         </div>
       </div>
     </section>
+
+    <!-- ============ APP (some sozinha quando o site já está aberto como app) ============ -->
+    <section class="section app" id="app" hidden>
+      <div class="container">
+        <div class="app__card">
+          <div class="app__head">
+            <span class="eyebrow eyebrow--dark reveal">App do Genival</span>
+            <h2 class="reveal">Leve o Genival no seu <em class="gold">celular</em></h2>
+            <p class="reveal">Instale o app de graça, direto daqui: sem loja e sem cadastro. Ele fica na tela inicial, pertinho dos seus outros apps.</p>
+          </div>
+
+          <div class="phone reveal" aria-hidden="true">
+            <div class="phone__body">
+              <div class="phone__screen">
+                <span class="phone__island"></span>
+                <span class="phone__status"><b>9:41</b><i></i><i></i></span>
+                <span class="phone__apps">
+                  <span></span><span></span><span></span><span></span>
+                  <span></span>
+                  <span class="phone__me"><img src="apple-touch-icon.png" alt="" width="180" height="180" loading="lazy" /><small>Genival Pet</small></span>
+                  <span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                  <span></span><span></span><span></span><span></span>
+                </span>
+                <span class="phone__dots"><i></i><i></i><i></i></span>
+                <span class="phone__dock"><span></span><span></span><span></span><span></span></span>
+              </div>
+            </div>
+            <div class="chip chip--c">
+              <span class="chip__ico chip__ico--gold"><svg><use href="#i-bolt"/></svg></span>
+              <span><strong>Grátis</strong><small>sem loja de apps</small></span>
+            </div>
+          </div>
+
+          <ul class="app__perks">
+            <li class="reveal"><span class="app__ico"><svg><use href="#i-repeat"/></svg></span><span><strong>Agende em 1 toque</strong><small>Seu último pedido fica salvo para repetir</small></span></li>
+            <li class="reveal"><span class="app__ico"><svg><use href="#i-offline"/></svg></span><span><strong>Abre até sem internet</strong><small>Preços e contatos sempre à mão</small></span></li>
+            <li class="reveal"><span class="app__ico"><svg><use href="#i-sparkle"/></svg></span><span><strong>Leve e sem anúncios</strong><small>Ocupa quase nada no celular</small></span></li>
+          </ul>
+
+          <div class="app__cta reveal">
+            <button type="button" class="btn btn--gold btn--lg" data-instalar><svg><use href="#i-download"/></svg> Instalar o app</button>
+            <p class="app__dica" id="app-dica">Funciona no Android, no iPhone e no computador</p>
+            <p class="app__ok" id="app-ok" hidden><span><svg><use href="#i-check"/></svg></span>Prontinho! O app já está na sua tela inicial.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ============ CONTATO + RODAPÉ ============ -->
@@ -290,7 +364,10 @@
         <img class="contato__logo" src="images/logo.webp" alt="" width="88" height="88" loading="lazy" />
         <h2>Bora deixar seu pet <em class="gold">lindo?</em></h2>
         <p>Me chama no WhatsApp, respondo rapidinho!</p>
-        <a class="btn btn--wa btn--lg" data-wa href="#" target="_blank" rel="noopener noreferrer"><svg><use href="#i-wa"/></svg> Chamar no WhatsApp</a>
+        <div class="contato__btns">
+          <a class="btn btn--wa btn--lg" data-wa href="#" target="_blank" rel="noopener noreferrer"><svg><use href="#i-wa"/></svg> Chamar no WhatsApp</a>
+          <button type="button" class="btn btn--glass btn--lg" data-indicar hidden><svg><use href="#i-share"/></svg> Indicar para um amigo</button>
+        </div>
       </div>
 
       <ul class="contatos">
@@ -313,7 +390,46 @@
     <a class="btn btn--gold" id="bar-btn" href="#passo-servico"><span>Agendar</span></a>
   </div>
 
-  <script src="config.js?v=6"></script>
-  <script src="script.js?v=6"></script>
+  <!-- Convite para instalar o app (aparece só em boas horas, ex.: depois de enviar o pedido) -->
+  <div class="toast" id="toast-app" role="status" hidden>
+    <img class="toast__icon" src="apple-touch-icon.png" alt="" width="48" height="48" loading="lazy" />
+    <p class="toast__txt"><strong id="toast-titulo">Pedido enviado! 🐾</strong><small>Instale o app e agende em 1 toque.</small></p>
+    <button type="button" class="btn btn--gold btn--sm" data-instalar>Instalar</button>
+    <button type="button" class="toast__x" data-fechar-toast aria-label="Fechar"><svg><use href="#i-x"/></svg></button>
+  </div>
+
+  <!-- Passo a passo para instalar (quando o navegador não tem o botão automático, como no iPhone) -->
+  <dialog class="sheet" id="instalar" aria-labelledby="instalar-titulo">
+    <div class="sheet__in">
+      <span class="sheet__grip" aria-hidden="true"></span>
+      <button type="button" class="sheet__x" data-fechar aria-label="Fechar"><svg><use href="#i-x"/></svg></button>
+      <img class="sheet__icon" src="apple-touch-icon.png" alt="" width="72" height="72" loading="lazy" />
+      <h3 id="instalar-titulo">Instale em 3 toques</h3>
+      <p class="sheet__sub">O Genival fica na sua tela inicial, igual a qualquer outro app.</p>
+      <p class="sheet__aviso" data-social hidden><svg><use href="#i-sparkle"/></svg><span>Abriu pelo Instagram ou Facebook? Antes, toque nos <b>três pontinhos</b> e escolha <b>Abrir no navegador</b>.</span></p>
+
+      <ol class="passos" data-passos="ios">
+        <li><span class="passos__n">1</span><span>Toque em <b>Compartilhar</b> <span class="tecla"><svg><use href="#i-share-ios"/></svg></span> na barra do Safari<small>No iPhone mais novo, ele fica no menu de três pontinhos</small></span></li>
+        <li><span class="passos__n">2</span><span>Role a lista e toque em <b>Adicionar à Tela de Início</b> <span class="tecla"><svg><use href="#i-addhome"/></svg></span></span></li>
+        <li><span class="passos__n">3</span><span>Toque em <b>Adicionar</b>. Pronto, é só abrir pelo ícone! 🐾</span></li>
+      </ol>
+      <ol class="passos" data-passos="android" hidden>
+        <li><span class="passos__n">1</span><span>Toque no menu <span class="tecla"><svg><use href="#i-dots"/></svg></span> do navegador, no canto de cima</span></li>
+        <li><span class="passos__n">2</span><span>Toque em <b>Instalar app</b> ou <b>Adicionar à tela inicial</b></span></li>
+        <li><span class="passos__n">3</span><span>Confirme em <b>Instalar</b>. Pronto, é só abrir pelo ícone! 🐾</span></li>
+      </ol>
+      <ol class="passos" data-passos="pc" hidden>
+        <li><span class="passos__n">1</span><span>No <b>Chrome</b> ou no <b>Edge</b>, clique em <b>Instalar</b> <span class="tecla"><svg><use href="#i-download"/></svg></span> no fim da barra de endereço</span></li>
+        <li><span class="passos__n">2</span><span>No <b>Safari</b> do Mac, use o menu <b>Arquivo</b> e depois <b>Adicionar ao Dock</b></span></li>
+        <li><span class="passos__n">3</span><span>Confirme. O Genival abre numa janela só dele! 🐾</span></li>
+      </ol>
+
+      <button type="button" class="btn btn--navy btn--lg btn--block" data-fechar>Entendi</button>
+    </div>
+  </dialog>
+
+  <script src="config.js?v=9"></script>
+  <script src="script.js?v=9"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>

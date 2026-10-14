@@ -87,7 +87,7 @@
   // Posição do cão na foto, para ele ficar centralizado no quadrinho (via CSSOM: a CSP bloqueia style="")
   const focar = (img, s) => (img.style.objectPosition = `${(s.foco && s.foco[escolha.porte]) || "50%"} 50%`);
   const servicosEl = $("#servicos");
-  let etiquetas = 0; // alterna a cor das etiquetas: dourada, lilás, dourada...
+  let etiquetas = 0; // alterna a cor das etiquetas: dourada, couro, dourada...
   servicosEl.innerHTML = C.servicos
     .map(
       (s, i) => `
@@ -289,6 +289,73 @@
 
   atualizarPrecos();
   atualizarResumo();
+
+  /* ---------- Último pedido: fica salvo só neste aparelho, para repetir em 1 toque ---------- */
+  const CHAVE_PEDIDO = "genival:ultimo-pedido";
+
+  const aoEnviar = (e) => {
+    if (!e.currentTarget.target) return; // ainda sem pedido: o botão só leva ao passo 2
+    const servico = C.servicos[escolha.servico];
+    try {
+      localStorage.setItem(
+        CHAVE_PEDIDO,
+        JSON.stringify({
+          porte: escolha.porte,
+          servico: servico ? servico.nome : null,
+          extras: [...escolha.extras].map((i) => C.adicionais[i].nome),
+          pet: escolha.pet,
+        })
+      );
+    } catch (erro) {}
+    document.dispatchEvent(new CustomEvent("pedido-enviado")); // o app.js convida a instalar o app
+  };
+  resumoBtn.addEventListener("click", aoEnviar);
+  barBtn.addEventListener("click", aoEnviar);
+
+  let ultimo = null;
+  try {
+    ultimo = JSON.parse(localStorage.getItem(CHAVE_PEDIDO));
+  } catch (erro) {}
+
+  // Busca pelo nome (e não pela posição) para continuar certo se a lista do config.js mudar
+  const porteSalvo = ultimo && C.portes.find((p) => p.id === ultimo.porte);
+  const servicoSalvo = ultimo ? C.servicos.findIndex((s) => s.nome === ultimo.servico) : -1;
+  const extrasSalvos = ultimo && Array.isArray(ultimo.extras)
+    ? ultimo.extras.map((n) => C.adicionais.findIndex((a) => a.nome === n)).filter((i) => i >= 0)
+    : [];
+
+  if (porteSalvo && (servicoSalvo >= 0 || extrasSalvos.length)) {
+    const repetir = $("#repetir");
+    const repetirBtn = $("#repetir-btn");
+    const pet = String(ultimo.pet || "").slice(0, 60);
+    const qtd = extrasSalvos.length;
+    $("#repetir-texto").textContent = [
+      pet,
+      servicoSalvo >= 0 ? C.servicos[servicoSalvo].nome : "",
+      qtd ? `${qtd} extra${qtd > 1 ? "s" : ""}` : "",
+      porteSalvo.nome,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    repetir.hidden = false;
+
+    repetirBtn.addEventListener("click", () => {
+      escolha.porte = porteSalvo.id;
+      marcar(portesEl, [...portesEl.children].find((b) => b.dataset.porte === porteSalvo.id));
+      escolha.servico = servicoSalvo;
+      marcar(servicosEl, servicoSalvo >= 0 ? servicosEl.children[servicoSalvo] : null);
+      escolha.extras = new Set(extrasSalvos);
+      extrasEl.querySelectorAll("[data-extra]").forEach((b) => b.setAttribute("aria-pressed", escolha.extras.has(+b.dataset.extra)));
+      escolha.pet = pet;
+      $("#pet").value = pet;
+      atualizarPrecos();
+      atualizarResumo();
+
+      repetir.classList.add("repetir--ok");
+      repetirBtn.textContent = "Pedido pronto!";
+      $("#resumo").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    });
+  }
 
   /* ---------- Topo com sombra ao rolar + barra fixa do celular ---------- */
   const nav = $(".nav");
