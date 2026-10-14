@@ -6,8 +6,21 @@
    - Fotos: mostra a cópia guardada na hora e atualiza por trás.
    Só precisa mexer aqui se mudar a lista ESSENCIAIS
    (aí aumente o número do CACHE para todo mundo baixar de novo).
+
+   Em caso de invasão: depois de recuperar a conta do GitHub, troque TODO este arquivo por
+     self.addEventListener("install", () => self.skipWaiting());
+     self.addEventListener("activate", (e) => e.waitUntil(
+       caches.keys()
+         .then((n) => Promise.all(n.filter((k) => k.startsWith("genival-")).map((k) => caches.delete(k))))
+         .then(() => self.registration.unregister())
+     ));
+   Em até 24 h todo celular que abrir o site apaga as cópias guardadas.
    ========================================================= */
-const CACHE = "genival-v2";
+
+// O endereço erikfrvr.github.io é dividido com outros sites (Giovanna etc.), e o espaço
+// de cópias guardadas também: este service worker só mexe nas cópias com este prefixo.
+const PREFIXO = "genival-";
+const CACHE = PREFIXO + "v2";
 
 // Baixados já na instalação, para o app abrir completo mesmo sem internet
 const ESSENCIAIS = [
@@ -44,7 +57,8 @@ self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches
       .keys()
-      .then((nomes) => Promise.all(nomes.filter((n) => n !== CACHE).map((n) => caches.delete(n))))
+      // apaga só as versões antigas do Genival (nunca as cópias dos outros sites)
+      .then((nomes) => Promise.all(nomes.filter((n) => n.startsWith(PREFIXO) && n !== CACHE).map((n) => caches.delete(n))))
       .then(() => self.clients.claim())
   );
 });
@@ -66,13 +80,16 @@ self.addEventListener("fetch", (e) => {
   }
 });
 
+// Só guarda resposta completa e do próprio site (nada de redirecionamento ou resposta opaca)
+const guardar = (cache, chave) => (res) => {
+  if (res.ok && res.type === "basic" && !res.redirected) cache.put(chave, res.clone());
+  return res;
+};
+
 async function redePrimeiro(e, req, chave) {
   const cache = await caches.open(CACHE);
   // "no-cache": pergunta ao servidor se mudou (quando não mudou, a resposta é rapidinha)
-  const rede = fetch(req.mode === "navigate" ? req : new Request(req, { cache: "no-cache" })).then((res) => {
-    if (res.ok) cache.put(chave, res.clone());
-    return res;
-  });
+  const rede = fetch(req.mode === "navigate" ? req : new Request(req, { cache: "no-cache" })).then(guardar(cache, chave));
   e.waitUntil(rede.catch(() => {}));
 
   try {
@@ -97,10 +114,7 @@ async function redePrimeiro(e, req, chave) {
 async function guardadoPrimeiro(e, req, chave) {
   const cache = await caches.open(CACHE);
   const salvo = await cache.match(chave);
-  const rede = fetch(req).then((res) => {
-    if (res.ok) cache.put(chave, res.clone());
-    return res;
-  });
+  const rede = fetch(req).then(guardar(cache, chave));
   if (salvo) {
     e.waitUntil(rede.catch(() => {}));
     return salvo;

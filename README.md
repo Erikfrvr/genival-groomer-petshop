@@ -133,6 +133,11 @@ O `config.js` é público (qualquer um pode *ler*, como os preços já são), ma
 - **Links:** os botões de WhatsApp são montados só com os dígitos do número, e o que vem do `config.js` é conferido
   (fotos só da pasta `images/`, email e telefone no formato certo).
 - **Erros de digitação** não chegam ao site (conferência no commit, no GitHub e na própria página).
+- **Vizinhos de endereço:** `erikfrvr.github.io` é dividido com os outros sites (Giovanna etc.), e o celular guarda
+  as cópias offline de todos no mesmo lugar. O `sw.js` só mexe nas cópias que começam com `genival-`,
+  então nunca apaga as dos outros (e eles também não apagam as do Genival).
+- **Em caso de invasão:** depois de recuperar a conta do GitHub, siga a instrução de emergência no topo do `sw.js`:
+  ela faz todos os celulares apagarem as cópias guardadas do Genival.
 
 **O que depende de você (a porta de entrada é a sua conta do GitHub)**
 
