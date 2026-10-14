@@ -82,7 +82,7 @@ As fotos originais ficam guardadas em `images/originais/` (essa pasta não vai p
 
 ## Depois de mudar algo
 
-No `index.html`, aumente o número em `?v=` (ex.: `?v=9` → `?v=10`) nas linhas do
+No `index.html`, aumente o número em `?v=` (ex.: `?v=10` → `?v=11`) nas linhas do
 `style.css`, `config.js`, `script.js` e `app.js`. Assim quem já abriu o site recebe a versão nova
 em vez da guardada no navegador.
 

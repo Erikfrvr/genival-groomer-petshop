@@ -37,7 +37,7 @@
   <link rel="preload" href="fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="style.css?v=9" />
+  <link rel="stylesheet" href="style.css?v=10" />
   <script>document.documentElement.className+=" js"+(navigator.standalone||matchMedia("(display-mode: standalone)").matches?" is-app":"")</script>
 
   <!-- Dados para o Google (aparece melhor nas buscas) -->
@@ -408,9 +408,25 @@
       <p class="sheet__sub">O Genival fica na sua tela inicial, igual a qualquer outro app.</p>
       <p class="sheet__aviso" data-social hidden><svg><use href="#i-sparkle"/></svg><span>Abriu pelo Instagram ou Facebook? Antes, toque nos <b>três pontinhos</b> e escolha <b>Abrir no navegador</b>.</span></p>
 
+      <!-- Chrome, Edge e Samsung: o navegador libera o botão de instalar depois de uns segundos na página -->
+      <div class="auto" data-auto hidden>
+        <div class="auto__espera" data-espera>
+          <span class="auto__giro" aria-hidden="true"></span>
+          <p><strong data-espera-titulo>Preparando a instalação…</strong><small data-espera-texto>O navegador libera o botão em alguns segundos. Deixe esta tela aberta.</small></p>
+          <span class="auto__barra" aria-hidden="true"><i data-espera-barra></i></span>
+        </div>
+        <button type="button" class="btn btn--gold btn--lg btn--block" data-instalar-agora hidden><svg><use href="#i-download"/></svg> Instalar agora</button>
+        <p class="auto__ou"><span>ou pelo menu do navegador</span></p>
+      </div>
+
       <ol class="passos" data-passos="ios">
         <li><span class="passos__n">1</span><span>Toque em <b>Compartilhar</b> <span class="tecla"><svg><use href="#i-share-ios"/></svg></span> na barra do Safari<small>No iPhone mais novo, ele fica no menu de três pontinhos</small></span></li>
         <li><span class="passos__n">2</span><span>Role a lista e toque em <b>Adicionar à Tela de Início</b> <span class="tecla"><svg><use href="#i-addhome"/></svg></span></span></li>
+        <li><span class="passos__n">3</span><span>Toque em <b>Adicionar</b>. Pronto, é só abrir pelo ícone! 🐾</span></li>
+      </ol>
+      <ol class="passos" data-passos="ios-chrome" hidden>
+        <li><span class="passos__n">1</span><span>Toque em <b>Compartilhar</b> <span class="tecla"><svg><use href="#i-share-ios"/></svg></span> na barra de endereço, lá em cima</span></li>
+        <li><span class="passos__n">2</span><span>Toque em <b>Adicionar à Tela de Início</b> <span class="tecla"><svg><use href="#i-addhome"/></svg></span><small>Se não aparecer, toque em "Mais" no fim da lista</small></span></li>
         <li><span class="passos__n">3</span><span>Toque em <b>Adicionar</b>. Pronto, é só abrir pelo ícone! 🐾</span></li>
       </ol>
       <ol class="passos" data-passos="android" hidden>
@@ -424,12 +440,15 @@
         <li><span class="passos__n">3</span><span>Confirme. O Genival abre numa janela só dele! 🐾</span></li>
       </ol>
 
+      <p class="sheet__dica" data-dica="ios" hidden><b>Não achou a opção?</b> Se o link abriu de dentro de outro app (WhatsApp, Gmail…), toque em <b>Abrir no Safari</b> e tente de novo.</p>
+      <p class="sheet__dica" data-dica="android" hidden><b>Não aparece "Instalar app"?</b> Se o link abriu de dentro de outro app (WhatsApp, Gmail…), toque em <b>Abrir no Chrome</b> pelo menu e tente de novo.</p>
+
       <button type="button" class="btn btn--navy btn--lg btn--block" data-fechar>Entendi</button>
     </div>
   </dialog>
 
-  <script src="config.js?v=9"></script>
-  <script src="script.js?v=9"></script>
-  <script src="app.js?v=9"></script>
+  <script src="config.js?v=10"></script>
+  <script src="script.js?v=10"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>

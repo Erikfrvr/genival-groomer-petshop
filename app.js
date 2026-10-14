@@ -49,25 +49,62 @@
   const ok = $("#app-ok");
   const sheet = $("#instalar");
   const toast = $("#toast-app");
-  const plataforma = ehIOS ? "ios" : ehAndroid ? "android" : "pc";
-  let convite = null; // evento "beforeinstallprompt": botão de instalar automático (Chrome, Edge, Samsung)
+  const plataforma = ehIOS ? (/CriOS/i.test(ua) ? "ios-chrome" : "ios") : ehAndroid ? "android" : "pc";
+  // Chrome, Edge e Samsung têm botão de instalar automático, mas só o liberam depois que a pessoa
+  // toca na página e fica uns 30 segundos nela (regra do navegador)
+  const temBotaoAuto = "onbeforeinstallprompt" in window;
+  const abriuEm = Date.now();
+  let convite = null; // evento "beforeinstallprompt": quando chega, o botão instala direto
 
   secao.hidden = false;
 
   const dicas = {
     pronto: "Grátis · instala em segundos",
     ios: "No iPhone: Compartilhar e depois Adicionar à Tela de Início",
+    "ios-chrome": "No Chrome do iPhone: Compartilhar e depois Adicionar à Tela de Início",
     android: "No menu do navegador: Instalar app",
     pc: "Funciona no celular e no computador",
     social: "Abra no navegador (Chrome ou Safari) para instalar",
   };
-  const atualizarDica = () => (dica.textContent = convite ? dicas.pronto : ehRedeSocial ? dicas.social : dicas[plataforma]);
+  const atualizarDica = () =>
+    (dica.textContent = ehRedeSocial ? dicas.social : convite || temBotaoAuto ? dicas.pronto : dicas[plataforma]);
   atualizarDica();
+
+  /* Espera do botão automático (dentro do passo a passo) */
+  const auto = sheet.querySelector("[data-auto]");
+  const espera = sheet.querySelector("[data-espera]");
+  const esperaTitulo = sheet.querySelector("[data-espera-titulo]");
+  const esperaTexto = sheet.querySelector("[data-espera-texto]");
+  const esperaBarra = sheet.querySelector("[data-espera-barra]");
+  const agora = sheet.querySelector("[data-instalar-agora]");
+  let timerEspera;
+
+  function esperarBotao() {
+    agora.hidden = true;
+    espera.hidden = false;
+    espera.classList.remove("auto__espera--parou");
+    esperaTitulo.textContent = "Preparando a instalação…";
+    esperaTexto.textContent = "O navegador libera o botão em alguns segundos. Deixe esta tela aberta.";
+    const falta = Math.max(4, 32 - (Date.now() - abriuEm) / 1000); // segundos até completar os ~30 s
+    esperaBarra.style.animation = "none";
+    void esperaBarra.offsetWidth; // reinicia a barrinha
+    esperaBarra.style.animation = `encher ${falta}s linear forwards`;
+    clearTimeout(timerEspera);
+    timerEspera = setTimeout(() => {
+      espera.classList.add("auto__espera--parou");
+      esperaTitulo.textContent = "O botão não apareceu desta vez";
+      esperaTexto.textContent = "Se o app já estiver instalado, procure o ícone Genival Pet na tela inicial. Se não, siga o passo a passo abaixo.";
+    }, (falta + 8) * 1000);
+  }
 
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault(); // usamos o nosso botão no lugar da faixa padrão do navegador
     convite = e;
     atualizarDica();
+    // se o passo a passo estiver aberto esperando, aparece o "Instalar agora"
+    clearTimeout(timerEspera);
+    espera.hidden = true;
+    agora.hidden = false;
   });
 
   function instalado() {
@@ -93,9 +130,12 @@
         atualizarDica(); // se o navegador recusar, segue para o passo a passo
       }
     }
-    // Sem botão automático (iPhone, Firefox...): mostra o passo a passo
+    // Botão automático ainda não liberado (ou não existe, como no iPhone): mostra o passo a passo
     sheet.querySelectorAll("[data-passos]").forEach((ol) => (ol.hidden = ol.dataset.passos !== plataforma));
+    sheet.querySelectorAll("[data-dica]").forEach((p) => (p.hidden = p.dataset.dica !== plataforma));
     sheet.querySelector("[data-social]").hidden = !ehRedeSocial;
+    auto.hidden = !temBotaoAuto || ehRedeSocial;
+    if (!auto.hidden) esperarBotao();
     sheet.showModal();
   }
 
@@ -105,8 +145,13 @@
       instalar();
     })
   );
+  agora.addEventListener("click", () => {
+    sheet.close();
+    instalar(); // agora já tem o convite: abre a instalação do navegador
+  });
   $$("[data-fechar]").forEach((b) => b.addEventListener("click", () => sheet.close()));
   sheet.addEventListener("click", (e) => e.target === sheet && sheet.close()); // toque fora fecha
+  sheet.addEventListener("close", () => clearTimeout(timerEspera));
 
   /* ---------- Convite (toast): só em boas horas e sem insistir ----------
      1) quando a pessoa volta do WhatsApp depois de enviar o pedido
