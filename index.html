@@ -7,9 +7,12 @@
   <meta name="description" content="Banho e tosa com carinho em Santana, São Paulo. Veja os preços por porte e peça o horário do seu pet em 1 minuto pelo WhatsApp." />
   <meta name="theme-color" content="#0f2240" />
 
-  <!-- Segurança: só permite carregar scripts, estilos, fontes, imagens, o manifesto do app e o service worker do próprio site.
-       Se mudar o script inline abaixo (classes "js" e "is-app"), gere um novo hash sha256 para ele. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-0Wi5UPwQlhs1JM8RhcNXEqACqm2ZX1clLLFBhp7V3b0='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; upgrade-insecure-requests" />
+  <!-- Segurança (CSP): o navegador só aceita scripts, estilos, fontes, imagens, o manifesto do app
+       e o service worker do próprio site. Nada de fora, nada injetado.
+       Trusted Types: proíbe transformar texto em HTML ou script; só as duas políticas do site
+       (genival-dados no script.js e genival-sw no app.js) podem criar algo, e cada uma só aceita uma coisa.
+       Se mudar o script inline abaixo, gere um novo hash sha256 para ele. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-Qh+5eryNSUTRrDGpNIDYtolYpj7GhscvhwMkkumQmqE='; style-src 'self'; font-src 'self'; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'; require-trusted-types-for 'script'; trusted-types genival-dados genival-sw; upgrade-insecure-requests" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <!-- App: deixa o site ser instalado na tela inicial do celular -->
@@ -37,30 +40,10 @@
   <link rel="preload" href="fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/fraunces-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/fraunces-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="style.css?v=10" />
-  <script>document.documentElement.className+=" js"+(navigator.standalone||matchMedia("(display-mode: standalone)").matches?" is-app":"")</script>
-
-  <!-- Dados para o Google (aparece melhor nas buscas) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Genival Groomer Petshop",
-    "description": "Banho e tosa para cães de todos os portes em Santana, São Paulo.",
-    "url": "https://erikfrvr.github.io/genival-groomer-petshop/",
-    "image": "https://erikfrvr.github.io/genival-groomer-petshop/images/capa-link.jpg",
-    "telephone": "+55 11 97067 2297",
-    "email": "sgenivalramos@gmail.com",
-    "priceRange": "R$ 50 a R$ 250",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Rua Dona Elfrida, 252, Santana",
-      "addressLocality": "São Paulo",
-      "addressRegion": "SP",
-      "addressCountry": "BR"
-    }
-  }
-  </script>
+  <link rel="stylesheet" href="style.css?v=11" />
+  <!-- Classes de início: "js", "is-app" (aberto pelo ícone) e "is-framed" (alguém tentou exibir o site dentro de outro: some na hora) -->
+  <script>document.documentElement.className+=" js"+(navigator.standalone||matchMedia("(display-mode: standalone)").matches?" is-app":"")+(self!==top?" is-framed":"")</script>
+  <!-- Os dados para o Google (endereço, telefone, preços) são gerados do config.js pelo script.js -->
 </head>
 <body>
 
@@ -125,7 +108,7 @@
         <div class="hero__text">
           <p class="hello reveal">
             <img class="hello__img" src="images/avatar.webp" alt="" width="48" height="48" />
-            <span><strong>Oi! Eu sou o Genival 👋</strong><small>Groomer há <span data-anos>25</span> anos · Santana, SP</small></span>
+            <span><strong>Oi! Eu sou o Genival 👋</strong><small>Groomer há <span data-anos>25</span> anos · <span data-bairro>Santana, SP</span></small></span>
           </p>
           <h1 class="reveal">Seu pet <em class="gold">lindo</em>, cheiroso e <em class="caramel">feliz</em>.</h1>
           <p class="lead reveal">Banho e tosa com carinho, paciência e produtos de qualidade. Veja os preços e peça seu horário em 1&nbsp;minuto.</p>
@@ -142,7 +125,7 @@
           <img class="hero__seal" src="images/logo.webp" alt="Logo Genival Groomer Petshop" width="96" height="96" />
           <div class="chip chip--a">
             <span class="chip__ico chip__ico--brown"><svg><use href="#i-paw"/></svg></span>
-            <span><strong>+250</strong><small>pets por mês</small></span>
+            <span><strong data-pets>+250</strong><small>pets por mês</small></span>
           </div>
           <div class="chip chip--b">
             <span class="chip__ico chip__ico--gold"><svg><use href="#i-star"/></svg></span>
@@ -187,6 +170,9 @@
           <p class="repetir__txt"><strong>Que bom te ver de novo!</strong><small id="repetir-texto"></small></p>
           <button type="button" class="btn btn--navy btn--sm" id="repetir-btn">Repetir pedido</button>
         </div>
+
+        <!-- Só aparece se o config.js estiver com erro de escrita (rode: node verificar.mjs) -->
+        <p class="falha" id="falha-config" hidden>Estamos atualizando os preços agora mesmo. Volte em alguns minutinhos 🐾</p>
 
         <div class="agenda__grid">
           <div class="steps">
@@ -289,7 +275,7 @@
           </details>
           <details class="reveal">
             <summary>Como sei o porte do meu pet?</summary>
-            <p>Pelo peso: <strong>pequeno</strong> até 10 kg, <strong>médio</strong> de 10 a 25 kg e <strong>grande</strong> acima de 25 kg. Na dúvida, me manda uma foto!</p>
+            <p data-portes-faq>Pelo peso: <strong>pequeno</strong> até 10 kg, <strong>médio</strong> de 10 a 25 kg e <strong>grande</strong> acima de 25 kg. Na dúvida, me manda uma foto!</p>
           </details>
           <details class="reveal">
             <summary>Por que alguns valores são “a partir de”?</summary>
@@ -301,7 +287,7 @@
           </details>
           <details class="reveal">
             <summary>Quais as formas de pagamento?</summary>
-            <p>Pix, dinheiro e cartão.</p>
+            <p data-pagamento>Pix, dinheiro e cartão.</p>
           </details>
         </div>
       </div>
@@ -447,8 +433,9 @@
     </div>
   </dialog>
 
-  <script src="config.js?v=10"></script>
-  <script src="script.js?v=10"></script>
-  <script src="app.js?v=10"></script>
+  <script src="config.js?v=11"></script>
+  <script src="conferir.js?v=11"></script>
+  <script src="script.js?v=11"></script>
+  <script src="app.js?v=11"></script>
 </body>
 </html>

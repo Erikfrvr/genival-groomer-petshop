@@ -109,6 +109,8 @@ body {
 }
 
 [hidden] { display: none !important; }
+/* Segurança: se alguém exibir o site dentro de outra página (golpe de clique), ele some na hora */
+html.is-framed body { display: none !important; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; }
@@ -498,6 +500,21 @@ p { margin: 0; text-wrap: pretty; }
 .repetir--ok .repetir__ico { background: linear-gradient(135deg, #2cd36d, var(--wa-d)); color: #fff; }
 
 .agenda__grid { display: grid; gap: 30px; }
+
+/* config.js com erro de escrita: no lugar dos preços, um aviso educado */
+.falha {
+  max-width: 36rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: 18px;
+  background: var(--gold-50);
+  color: #5e4512;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1.5px rgba(226, 176, 74, 0.5);
+}
+.sem-config .agenda__grid,
+.sem-config .bar,
+.sem-config .contatos,
+.sem-config [data-wa] { display: none !important; }
 .steps { display: grid; gap: 38px; }
 /* deixa os itens da grade encolherem (senão algum conteúdo largo alarga a página) */
 .agenda__grid > *, .steps > *, .hero__grid > * { min-width: 0; }

@@ -9,16 +9,42 @@
     return;
   }
 
-  const C = CONFIG;
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
 
-  // Escapa textos do config.js antes de colocar no HTML
-  const esc = (v) =>
-    String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-  const soNumeros = (v) => String(v).replace(/\D/g, "");
+  /* ---------- Informações do config.js, já conferidas pelo conferir.js ----------
+     O que estiver errado fica de fora (e aparece no console), sem quebrar a página. */
+  if (typeof CONFIG === "undefined" || typeof conferirConfig !== "function") {
+    // config.js com erro de escrita: avisa com educação no lugar dos preços
+    document.documentElement.classList.add("sem-config");
+    $("#falha-config").hidden = false;
+    console.error("[config.js] O arquivo tem um erro de escrita. Rode: node verificar.mjs");
+    return;
+  }
+  const conferido = conferirConfig(CONFIG);
+  conferido.erros.forEach((m) => console.error("[config.js]", m));
+  conferido.avisos.forEach((m) => console.warn("[config.js]", m));
+  const C = conferido.config;
+
+  // Monta os elementos com createElement e textContent (nunca com HTML em texto):
+  // assim nenhum texto, nem do config.js, consegue virar código na página
+  const el = (tag, attrs, ...filhos) => {
+    const e = document.createElement(tag);
+    Object.entries(attrs || {}).forEach(([k, v]) => v != null && e.setAttribute(k, v));
+    e.append(...filhos.filter((f) => f != null && f !== ""));
+    return e;
+  };
+  const icone = (id, classe) => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    use.setAttribute("href", "#" + id);
+    if (classe) svg.setAttribute("class", classe);
+    svg.append(use);
+    return svg;
+  };
+
   const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
-  const waLink = (msg, numero = C.whatsapp) => `https://wa.me/${soNumeros(numero)}?text=${encodeURIComponent(msg)}`;
+  const waLink = (msg, numero = C.whatsapp) => `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const pulsar = (el) => {
@@ -29,20 +55,33 @@
   };
 
   /* ---------- Textos e contatos ---------- */
-  const anos = new Date().getFullYear() - C.naAreaPetDesde;
-  $$("[data-anos]").forEach((el) => (el.textContent = anos));
-  $$("[data-desde]").forEach((el) => (el.textContent = C.naAreaPetDesde));
-  $$("[data-wa]").forEach((el) => (el.href = waLink(C.mensagemPadrao)));
-  $$("[data-wa2]").forEach((el) => (el.href = waLink(C.mensagemPadrao, C.whatsapp2)));
+  const texto = (sel, valor) => $$(sel).forEach((e) => (e.textContent = valor));
+  const end = C.endereco;
+  const enderecoCompleto = [end.rua, end.bairro, end.cidade, end.estado].filter(Boolean).join(", ");
 
-  const fone = (n) => soNumeros(n).replace(/^55(\d{2})(\d{4,5})(\d{4})$/, "($1) $2 $3");
-  $$("[data-fone]").forEach((el) => (el.textContent = fone(C[el.dataset.fone])));
-  $$("[data-email]").forEach((el) => (el.href = `mailto:${encodeURI(C.email)}`));
-  $$("[data-email-texto]").forEach((el) => (el.textContent = C.email));
-  $$("[data-endereco]").forEach((el) => (el.textContent = C.endereco));
-  $$("[data-mapa]").forEach(
-    (el) => (el.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(C.endereco)}`)
-  );
+  texto("[data-anos]", new Date().getFullYear() - C.naAreaPetDesde);
+  texto("[data-desde]", C.naAreaPetDesde);
+  texto("[data-bairro]", [end.bairro, end.estado].filter(Boolean).join(", "));
+  texto("[data-pets]", `+${C.petsPorMes}`);
+  if (!C.petsPorMes) $$("[data-pets]").forEach((e) => (e.closest(".chip").hidden = true));
+  texto("[data-pagamento]", C.pagamento ? C.pagamento + "." : "Pergunte no WhatsApp.");
+  $$("[data-portes-faq]").forEach((e) => {
+    const partes = C.portes.map((p) => [el("strong", null, p.nome.toLowerCase()), p.detalhe ? ` (${p.detalhe})` : ""]);
+    e.replaceChildren(
+      "Pelo peso: ",
+      ...partes.flatMap((p, i) => [...p, i < partes.length - 2 ? ", " : i === partes.length - 2 ? " e " : ""]),
+      ". Na dúvida, me manda uma foto!"
+    );
+  });
+
+  $$("[data-wa]").forEach((e) => (e.href = waLink(C.mensagemPadrao)));
+  $$("[data-wa2]").forEach((e) => (C.whatsapp2 ? (e.href = waLink(C.mensagemPadrao, C.whatsapp2)) : (e.closest("li").hidden = true)));
+  const fone = (n) => n.replace(/^55(\d{2})(\d{4,5})(\d{4})$/, "($1) $2 $3");
+  $$("[data-fone]").forEach((e) => (e.textContent = fone(C[e.dataset.fone] || "")));
+  $$("[data-email]").forEach((e) => (C.email ? (e.href = `mailto:${encodeURIComponent(C.email).replace("%40", "@")}`) : (e.closest("li").hidden = true)));
+  texto("[data-email-texto]", C.email);
+  texto("[data-endereco]", enderecoCompleto);
+  $$("[data-mapa]").forEach((e) => (e.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(enderecoCompleto)}`));
   $("#ano").textContent = new Date().getFullYear();
 
   /* =========================================================
@@ -62,16 +101,17 @@
 
   /* ---------- 1. Porte ---------- */
   const portesEl = $("#portes");
-  portesEl.innerHTML = C.portes
-    .map(
-      (p, i) => `
-      <button type="button" class="porte porte--${i}" data-porte="${esc(p.id)}" aria-pressed="${i === 0}">
-        <span class="porte__ico"><svg><use href="#i-paw"/></svg></span>
-        <strong>${esc(p.nome)}</strong>
-        <small>${esc(p.detalhe)}</small>
-      </button>`
+  portesEl.append(
+    ...C.portes.map((p, i) =>
+      el(
+        "button",
+        { type: "button", class: `porte porte--${i}`, "data-porte": p.id, "aria-pressed": String(i === 0) },
+        el("span", { class: "porte__ico" }, icone("i-paw")),
+        el("strong", null, p.nome),
+        el("small", null, p.detalhe)
+      )
     )
-    .join("");
+  );
 
   portesEl.addEventListener("click", (e) => {
     const b = e.target.closest("[data-porte]");
@@ -88,21 +128,24 @@
   const focar = (img, s) => (img.style.objectPosition = `${(s.foco && s.foco[escolha.porte]) || "50%"} 50%`);
   const servicosEl = $("#servicos");
   let etiquetas = 0; // alterna a cor das etiquetas: dourada, couro, dourada...
-  servicosEl.innerHTML = C.servicos
-    .map(
-      (s, i) => `
-      <button type="button" class="svc" data-servico="${i}" aria-pressed="false">
-        ${s.destaque ? `<span class="svc__tag${etiquetas++ % 2 ? " svc__tag--alt" : ""}">${esc(s.destaque)}</span>` : ""}
-        <span class="svc__img"><img data-foto="${i}" src="${esc(fotoDe(s))}" alt="" width="560" height="350" loading="lazy" /></span>
-        <span class="svc__body">
-          <span class="svc__name">${esc(s.nome)}</span>
-          <span class="svc__desc">${esc(s.resumo || "")}</span>
-          <span class="svc__price">${s.aPartirDe ? "<small>a partir de</small>" : ""}<strong data-preco="${i}"></strong></span>
-        </span>
-        <span class="svc__radio" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
-      </button>`
+  servicosEl.append(
+    ...C.servicos.map((s, i) =>
+      el(
+        "button",
+        { type: "button", class: "svc", "data-servico": i, "aria-pressed": "false" },
+        s.destaque ? el("span", { class: "svc__tag" + (etiquetas++ % 2 ? " svc__tag--alt" : "") }, s.destaque) : null,
+        el("span", { class: "svc__img" }, el("img", { "data-foto": i, src: fotoDe(s), alt: "", width: 560, height: 350, loading: "lazy" })),
+        el(
+          "span",
+          { class: "svc__body" },
+          el("span", { class: "svc__name" }, s.nome),
+          el("span", { class: "svc__desc" }, s.resumo),
+          el("span", { class: "svc__price" }, s.aPartirDe ? el("small", null, "a partir de") : null, el("strong", { "data-preco": i }))
+        ),
+        el("span", { class: "svc__radio", "aria-hidden": "true" }, icone("i-check"))
+      )
     )
-    .join("");
+  );
 
   servicosEl.addEventListener("click", (e) => {
     const b = e.target.closest("[data-servico]");
@@ -125,16 +168,17 @@
 
   /* ---------- 3. Extras ---------- */
   const extrasEl = $("#extras");
-  extrasEl.innerHTML = C.adicionais
-    .map(
-      (a, i) => `
-      <button type="button" class="extra" data-extra="${i}" aria-pressed="false">
-        <span class="extra__ico" aria-hidden="true"><svg class="i-off"><use href="#i-plus"/></svg><svg class="i-on"><use href="#i-check"/></svg></span>
-        <span class="extra__name">${esc(a.nome)}</span>
-        <span class="extra__price" data-preco-extra="${i}"></span>
-      </button>`
+  extrasEl.append(
+    ...C.adicionais.map((a, i) =>
+      el(
+        "button",
+        { type: "button", class: "extra", "data-extra": i, "aria-pressed": "false" },
+        el("span", { class: "extra__ico", "aria-hidden": "true" }, icone("i-plus", "i-off"), icone("i-check", "i-on")),
+        el("span", { class: "extra__name" }, a.nome),
+        el("span", { class: "extra__price", "data-preco-extra": i })
+      )
     )
-    .join("");
+  );
 
   extrasEl.addEventListener("click", (e) => {
     const b = e.target.closest("[data-extra]");
@@ -177,6 +221,36 @@
     });
   }
 
+  /* ---------- Dados para o Google (endereço, telefone, preços), gerados do config.js ---------- */
+  // A página só aceita scripts criados por "políticas" conhecidas (Trusted Types): esta só deixa passar JSON válido
+  const dadosPolicy = window.trustedTypes
+    ? trustedTypes.createPolicy("genival-dados", { createScript: (s) => (JSON.parse(s), s) })
+    : null;
+  const precosTodos = C.servicos.flatMap((s) => Object.values(s.precos));
+  const site = ($('link[rel="canonical"]') || location).href;
+  const dados = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Genival Groomer Petshop",
+    description: `Banho e tosa para cães de todos os portes em ${end.bairro}, ${end.cidade}.`,
+    url: site,
+    image: new URL("images/capa-link.jpg", site).href,
+    telephone: "+" + C.whatsapp,
+    email: C.email || undefined,
+    priceRange: `R$ ${Math.min(...precosTodos)} a R$ ${Math.max(...precosTodos)}`,
+    paymentAccepted: C.pagamento || undefined,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: [end.rua, end.bairro].filter(Boolean).join(", "),
+      addressLocality: end.cidade,
+      addressRegion: end.estado,
+      addressCountry: "BR",
+    },
+  });
+  const ld = el("script", { type: "application/ld+json" });
+  ld.textContent = dadosPolicy ? dadosPolicy.createScript(dados) : dados;
+  document.head.append(ld);
+
   // Depois que a página carregar, baixa as fotos dos outros portes para a troca ser instantânea
   window.addEventListener("load", () => {
     if (navigator.connection && navigator.connection.saveData) return;
@@ -194,7 +268,7 @@
   const barRotulo = $("#bar-rotulo");
   const barValor = $("#bar-valor");
   const barBtn = $("#bar-btn");
-  const menorPreco = Math.min(...C.servicos.flatMap((s) => Object.values(s.precos)));
+  const menorPreco = Math.min(...precosTodos);
 
   const linha = (titulo, texto, valor, vazio) => {
     const row = document.createElement("div");
@@ -253,7 +327,7 @@
       barRotulo.textContent = "Banho e tosa a partir de";
       barValor.textContent = brl(menorPreco);
       barBtn.className = "btn btn--gold";
-      barBtn.innerHTML = "<span>Agendar</span>";
+      barBtn.replaceChildren(el("span", null, "Agendar"));
       linkInterno(barBtn, "#passo-servico");
       totalAnterior = null;
       return;
@@ -277,7 +351,7 @@
     barRotulo.textContent = `${nome}${qtdExtras ? ` + ${qtdExtras} extra${qtdExtras > 1 ? "s" : ""}` : ""} · ${porte.nome}${aPartir ? " · a partir de" : ""}`;
     barValor.textContent = brl(total);
     barBtn.className = "btn btn--wa";
-    barBtn.innerHTML = '<svg><use href="#i-wa"/></svg><span>Agendar</span>';
+    barBtn.replaceChildren(icone("i-wa"), el("span", null, "Agendar"));
     linkAberto(barBtn, link);
 
     if (total !== totalAnterior) {

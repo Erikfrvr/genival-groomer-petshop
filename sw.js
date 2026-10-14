@@ -1,18 +1,20 @@
 /* =========================================================
    SERVICE WORKER: faz o site funcionar como app
    - Páginas, estilos e scripts: busca sempre a versão nova na internet
-     e guarda uma cópia. Sem sinal, abre a cópia guardada.
+     (confere com o servidor a cada visita, então preço mudado no config.js
+     aparece na hora) e guarda uma cópia. Sem sinal, abre a cópia guardada.
    - Fotos: mostra a cópia guardada na hora e atualiza por trás.
    Só precisa mexer aqui se mudar a lista ESSENCIAIS
    (aí aumente o número do CACHE para todo mundo baixar de novo).
    ========================================================= */
-const CACHE = "genival-v1";
+const CACHE = "genival-v2";
 
 // Baixados já na instalação, para o app abrir completo mesmo sem internet
 const ESSENCIAIS = [
   "./",
   "style.css",
   "config.js",
+  "conferir.js",
   "script.js",
   "app.js",
   "manifest.webmanifest",
@@ -66,7 +68,8 @@ self.addEventListener("fetch", (e) => {
 
 async function redePrimeiro(e, req, chave) {
   const cache = await caches.open(CACHE);
-  const rede = fetch(req).then((res) => {
+  // "no-cache": pergunta ao servidor se mudou (quando não mudou, a resposta é rapidinha)
+  const rede = fetch(req.mode === "navigate" ? req : new Request(req, { cache: "no-cache" })).then((res) => {
     if (res.ok) cache.put(chave, res.clone());
     return res;
   });

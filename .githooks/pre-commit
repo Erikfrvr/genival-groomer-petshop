@@ -1,0 +1,13 @@
+#!/bin/sh
+# Antes de cada commit, confere o config.js: erro de digitação não chega ao site.
+# (ativado com: git config core.hooksPath .githooks)
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "Aviso: Node.js não encontrado, o config.js não foi conferido antes do commit."
+  exit 0
+fi
+
+node verificar.mjs || {
+  echo "Commit cancelado para proteger o site: corrija o config.js e tente de novo."
+  exit 1
+}

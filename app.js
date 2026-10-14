@@ -22,7 +22,17 @@
 
   /* ---------- Service worker: abre rápido e funciona sem internet ---------- */
   if ("serviceWorker" in navigator && window.isSecureContext) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+    // A página só aceita endereços de script por "políticas" conhecidas (Trusted Types): esta só libera o sw.js
+    const swPolicy = window.trustedTypes
+      ? trustedTypes.createPolicy("genival-sw", {
+          createScriptURL: (u) => {
+            if (u !== "sw.js") throw new TypeError("Endereço de service worker não permitido: " + u);
+            return u;
+          },
+        })
+      : null;
+    const sw = swPolicy ? swPolicy.createScriptURL("sw.js") : "sw.js";
+    window.addEventListener("load", () => navigator.serviceWorker.register(sw).catch(() => {}));
   }
 
   /* ---------- Indicar para um amigo (menu de compartilhar do celular) ---------- */
@@ -32,7 +42,7 @@
     indicar.addEventListener("click", () => {
       const url = ($('link[rel="canonical"]') || location).href;
       navigator
-        .share({ title: "Genival Groomer Petshop", text: "Banho e tosa com carinho em Santana, SP. Olha os preços e agenda pelo WhatsApp 🐾", url })
+        .share({ title: "Genival Groomer Petshop", text: "Banho e tosa com muito carinho! Olha os preços e agenda pelo WhatsApp 🐾", url })
         .catch(() => {});
     });
   }

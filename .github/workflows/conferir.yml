@@ -1,0 +1,29 @@
+# Confere o config.js a cada envio para o GitHub.
+# Se algo estiver errado, o GitHub mostra um X vermelho no commit e avisa por email.
+# Trava do WhatsApp (opcional): cadastre o número oficial em
+#   Settings → Secrets and variables → Actions → Variables → WHATSAPP_OFICIAL
+# e o GitHub dispara um alerta se alguém trocar o número no config.js.
+name: Conferir informações do site
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  conferir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Baixar o site
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Conferir config.js
+        run: node verificar.mjs
+        env:
+          WHATSAPP_OFICIAL: ${{ vars.WHATSAPP_OFICIAL }}

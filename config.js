@@ -1,37 +1,52 @@
 /* =========================================================
-   CONFIGURAÇÕES DO SITE: edite só este arquivo
-   para trocar contatos, serviços, preços e dias de atendimento.
+   INFORMAÇÕES DO SITE: preços, telefones, endereço...
+   Mudou alguma coisa? Altere aqui, salve e publique:
+   o site e o app se atualizam sozinhos.
+
+   Regrinhas para não quebrar nada:
+   • Textos ficam "entre aspas". Números (preços, anos) ficam sem aspas.
+   • Cada linha termina com vírgula.
+   • Antes de publicar, confira com:  node verificar.mjs
+     (ao fazer commit, isso já é conferido sozinho)
    ========================================================= */
 
 const CONFIG = {
+  /* ---------- Contatos ---------- */
   nome: "Genival",
+  whatsapp: "5511970672297", // recebe os agendamentos · só números: 55 + DDD + número
+  whatsapp2: "5511939617274", // segundo WhatsApp · deixe "" para não mostrar
+  email: "sgenivalramos@gmail.com", // deixe "" para não mostrar
 
-  // WhatsApp principal (recebe os agendamentos): só números, com 55 + DDD + número
-  whatsapp: "5511970672297",
+  /* ---------- Endereço ---------- */
+  endereco: {
+    rua: "Rua Dona Elfrida, 252",
+    bairro: "Santana",
+    cidade: "São Paulo",
+    estado: "SP",
+  },
 
-  // Contatos que aparecem no fim da página
-  whatsapp2: "5511939617274",
-  email: "sgenivalramos@gmail.com",
-  endereco: "Rua Dona Elfrida, 252, Santana, São Paulo, SP",
-
-  // Ano em que começou na área pet (os "anos de experiência" são calculados sozinhos)
-  naAreaPetDesde: 2001,
+  /* ---------- Sobre o Genival ---------- */
+  naAreaPetDesde: 2001, // os "anos de experiência" são calculados sozinhos
+  petsPorMes: 250, // "+250 pets por mês" no topo · 0 esconde
+  pagamento: "Pix, dinheiro e cartão", // aparece nas Dúvidas
 
   // Mensagem dos botões "Falar no WhatsApp"
   mensagemPadrao: "Olá, Genival! Vim pelo site e gostaria de agendar um horário para o meu pet 🐾",
 
+  /* ---------- Portes (o cliente escolhe um) ----------
+     id: letra curta usada nos preços abaixo (p, m, g) */
   portes: [
     { id: "p", nome: "Pequeno", detalhe: "até 10 kg" },
     { id: "m", nome: "Médio", detalhe: "10 a 25 kg" },
     { id: "g", nome: "Grande", detalhe: "acima de 25 kg" },
   ],
 
-  // Serviços principais (o cliente escolhe um)
-  //   precos: valor de cada porte · aPartirDe: true mostra "a partir de"
-  //   fotos: uma por porte (troca quando o cliente escolhe o porte)
-  //   foco: onde o cão está na foto, da esquerda (0%) para a direita (100%).
-  //         Deixa o cão centralizado no quadrinho do celular. Sem foco = 50% (meio)
-  //   destaque: etiqueta opcional ("Mais pedido", "Premium"...)
+  /* ---------- Serviços e preços (o cliente escolhe um) ----------
+     precos: valor de cada porte · aPartirDe: true mostra "a partir de"
+     destaque: etiqueta opcional ("Mais pedido", "Premium"...)
+     fotos: uma por porte, da pasta images/ (troca quando o cliente escolhe o porte)
+     foco: onde o cão está na foto, da esquerda (0%) para a direita (100%)
+           para ele ficar centralizado no quadrinho do celular. Sem foco = 50% */
   servicos: [
     {
       nome: "Banho",
@@ -76,8 +91,8 @@ const CONFIG = {
     },
   ],
 
-  // Extras (o cliente pode marcar vários)
-  //   preco: valor único · precos: valor por porte · preco: 0 mostra "Cortesia"
+  /* ---------- Extras (o cliente pode marcar vários) ----------
+     preco: valor único · precos: valor por porte · preco: 0 mostra "Cortesia" */
   adicionais: [
     { nome: "Hidratação", precos: { p: 30, m: 40, g: 60 } },
     { nome: "Escovação de dentes", preco: 15 },

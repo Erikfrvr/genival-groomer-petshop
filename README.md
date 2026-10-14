@@ -44,20 +44,44 @@ Aberto pelo ícone, ele ocupa a tela toda (sem a barra do navegador) e **abre at
 | `screenshots/` | Prints que aparecem na tela de instalação do Android e do computador |
 | `fonts/` | Fontes Fraunces e Plus Jakarta Sans guardadas no próprio site (para funcionar sem internet) |
 
-## Editar preços, serviços e contatos
+## ✏️ Editar preços, telefones, endereço…
 
-Tudo fica no arquivo **`config.js`**:
+**Todas as informações do Genival ficam num arquivo só: `config.js`.**
+Mudou um preço? Abra o `config.js`, troque o número, salve e publique (commit + push).
+Em cerca de 1 minuto o site e o app já mostram o valor novo, sozinhos: não precisa mexer em mais nada.
 
-| Campo | O que é |
-|---|---|
-| `whatsapp`, `whatsapp2`, `email`, `endereco` | Contatos (WhatsApp só com dígitos: `55` + DDD + número). Os agendamentos vão para o `whatsapp` |
-| `servicos` → `precos` | Valor de cada porte (`p`, `m`, `g`). `aPartirDe: true` mostra "a partir de" |
-| `servicos` → `resumo`, `destaque` | Texto curto e etiqueta opcional ("Mais pedido") |
-| `servicos` → `fotos` | Foto de cada porte: ela troca quando o cliente escolhe o porte |
-| `servicos` → `foco` | Onde o cão está em cada foto (`0%` esquerda, `50%` meio, `100%` direita), para ele ficar centralizado no quadrinho do celular |
-| `adicionais` | Extras: `preco` (valor único), `precos` (por porte) ou `preco: 0` (mostra "Cortesia") |
+| Campo | O que é | Onde aparece |
+|---|---|---|
+| `whatsapp` | WhatsApp que **recebe os agendamentos** (só dígitos: `55` + DDD + número) | Botões de agendar, contato, dados do Google |
+| `whatsapp2`, `email` | Segundo WhatsApp e email (deixe `""` para esconder) | Contato |
+| `endereco` → `rua`, `bairro`, `cidade`, `estado` | Endereço, em partes | Contato, mapa, topo ("Santana, SP"), dados do Google |
+| `naAreaPetDesde` | Ano em que começou (os "anos de experiência" se calculam sozinhos) | Topo e "Sobre" |
+| `petsPorMes` | Número do "+250 pets por mês" (`0` esconde) | Topo |
+| `pagamento` | Formas de pagamento | Dúvidas e dados do Google |
+| `portes` | Portes e pesos | Passo 1 e Dúvidas |
+| `servicos` → `precos` | Valor de cada porte (`p`, `m`, `g`). `aPartirDe: true` mostra "a partir de" | Passo 2, resumo, barra, faixa de preço do Google |
+| `servicos` → `resumo`, `destaque` | Texto curto e etiqueta opcional ("Mais pedido") | Passo 2 |
+| `servicos` → `fotos`, `foco` | Foto de cada porte e onde o cão está nela (`0%` esquerda, `100%` direita) | Passo 2 |
+| `adicionais` | Extras: `preco` (valor único), `precos` (por porte) ou `preco: 0` (mostra "Cortesia") | Passo 3 |
 
-As **dúvidas** (formas de pagamento etc.) e a frase do **sobre** ficam no `index.html`.
+**Regrinhas:** textos ficam `"entre aspas"`, números (preços, anos) ficam **sem** aspas, e cada linha termina com vírgula.
+
+**Conferir antes de publicar:** no terminal, dentro da pasta do site:
+
+```
+node verificar.mjs
+```
+
+Ele aponta qualquer erro em português e mostra a linha exata (ex.: "faltou uma vírgula na linha 24").
+Você nem precisa lembrar disso: **ao fazer commit, a conferência roda sozinha e cancela o commit se tiver erro**.
+E se você editar direto pelo site do GitHub, ele confere também e te avisa por email se algo estiver errado.
+
+Mesmo que um erro escape, o site não quebra: o que estiver errado fica de fora e, no pior caso,
+aparece um aviso educado ("Estamos atualizando os preços") no lugar da tabela.
+
+As **perguntas** das Dúvidas e a frase do **Sobre** ficam no `index.html`.
+O bairro também aparece no **título** da página e na **prévia do link** (topo do `index.html`):
+se mudar de bairro, troque lá também (o `verificar.mjs` te lembra disso).
 
 ## Cores
 
@@ -82,16 +106,55 @@ As fotos originais ficam guardadas em `images/originais/` (essa pasta não vai p
 
 ## Depois de mudar algo
 
-No `index.html`, aumente o número em `?v=` (ex.: `?v=10` → `?v=11`) nas linhas do
-`style.css`, `config.js`, `script.js` e `app.js`. Assim quem já abriu o site recebe a versão nova
-em vez da guardada no navegador.
+- **Só o `config.js`** (preços, telefones…): não precisa fazer mais nada.
+- **Visual ou código** (`style.css`, `script.js`, `app.js`, `conferir.js`): no `index.html`, aumente o número
+  em `?v=` dessas linhas (ex.: `?v=11` → `?v=12`).
 
-O app também se atualiza sozinho: com internet, ele sempre busca a versão nova (a cópia guardada
-só é usada sem sinal). Só mexa no `sw.js` se mudar a lista `ESSENCIAIS` dele: aí aumente o número
-em `CACHE` (ex.: `genival-v1` → `genival-v2`).
+O site e o app conferem a cada visita se há versão nova (a cópia guardada só é usada sem internet).
+Só mexa no `sw.js` se mudar a lista `ESSENCIAIS` dele: aí aumente o número em `CACHE`
+(ex.: `genival-v2` → `genival-v3`).
 
 Trocou o logo? Gere de novo os ícones da pasta `icons/` e o `apple-touch-icon.png`
 (dá para fazer em <https://maskable.app/editor>, com fundo azul marinho `#0f2240`).
+
+## 🔒 Segurança
+
+O site não tem servidor, login nem banco de dados: **quem visita não consegue mudar nada**.
+O `config.js` é público (qualquer um pode *ler*, como os preços já são), mas só quem entra na
+**sua conta do GitHub** consegue *alterar*. Nunca coloque senha ou chave em nenhum arquivo daqui.
+
+**O que já está protegido no site**
+
+- **Nada de fora:** sem scripts, fontes ou imagens de outros sites. O navegador só aceita arquivos do próprio site (CSP).
+- **Nada injetado:** o navegador proíbe transformar texto em HTML ou código (Trusted Types). Mesmo que alguém
+  escreva `<script>` no `config.js`, aparece como texto comum. Só duas "políticas" do site podem criar algo,
+  e cada uma só aceita uma coisa (JSON dos dados do Google e o endereço do `sw.js`).
+- **Site falso por cima:** se outra página tentar exibir o site dentro dela (golpe de clique), ele some na hora.
+- **Links:** os botões de WhatsApp são montados só com os dígitos do número, e o que vem do `config.js` é conferido
+  (fotos só da pasta `images/`, email e telefone no formato certo).
+- **Erros de digitação** não chegam ao site (conferência no commit, no GitHub e na própria página).
+
+**O que depende de você (a porta de entrada é a sua conta do GitHub)**
+
+1. **Ative a verificação em duas etapas:** GitHub → *Settings* → *Password and authentication* → *Two-factor authentication*
+   (use app autenticador ou *passkey*, não SMS).
+2. **Proteja a branch `main`:** no repositório → *Settings* → *Rules* → *Rulesets* → *New branch ruleset*,
+   alvo `main`, marque **Restrict deletions** e **Block force pushes**.
+3. **Trava do WhatsApp** (recomendado): no repositório → *Settings* → *Secrets and variables* → *Actions* →
+   aba *Variables* → *New repository variable*: nome `WHATSAPP_OFICIAL`, valor `5511970672297`.
+   Se alguém trocar o número no `config.js` para desviar clientes, o GitHub marca erro e te avisa por email.
+   (Se *você* trocar de número, atualize essa variável também.)
+4. **Confira de vez em quando:** *Settings* → *Collaborators* (ninguém estranho), *Deploy keys* e
+   *Applications* autorizadas na sua conta. E em *Settings* → *Pages*, deixe **Enforce HTTPS** marcado.
+
+**Arquivos da segurança e da conferência**
+
+| Arquivo | O que faz |
+|---|---|
+| `conferir.js` | Confere o `config.js` (no site e no `verificar.mjs`) |
+| `verificar.mjs` | Conferência no computador: `node verificar.mjs` |
+| `.githooks/pre-commit` | Roda a conferência a cada commit. Num computador novo, ative uma vez com `git config core.hooksPath .githooks` |
+| `.github/workflows/conferir.yml` | Conferência no GitHub a cada envio, com a trava do WhatsApp |
 
 ## Testar no computador
 
