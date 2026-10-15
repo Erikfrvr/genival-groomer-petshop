@@ -85,7 +85,16 @@ se mudar de bairro, troque lá também (o `verificar.mjs` te lembra disso).
 
 ## Cores
 
-As cores da logo (azul marinho, dourado e marrom do couro, com creme de apoio) ficam no topo do `style.css`.
+O site usa exatamente as cores da logo, e elas ficam no topo do `style.css`:
+
+| Cor | Código | Onde aparece |
+|---|---|---|
+| Vinho do couro | `#3c191b` | Fundos escuros (topo, fotos, contato), botões e textos |
+| Dourado da medalha | `#d5b65c` | Botões de agendar, preços, detalhes e costuras |
+| Marfim do centro | `#fdf6e8` | Textos sobre o vinho e fundos claros |
+
+Cada cor tem tons mais claros e mais escuros (`--vinho-50` até `--vinho-950`, `--gold-50` até `--gold-800`).
+O verde fica só nos botões de WhatsApp.
 
 ## Fotos
 
@@ -115,7 +124,7 @@ Só mexa no `sw.js` se mudar a lista `ESSENCIAIS` dele: aí aumente o número em
 (ex.: `genival-v2` → `genival-v3`).
 
 Trocou o logo? Gere de novo os ícones da pasta `icons/` e o `apple-touch-icon.png`
-(dá para fazer em <https://maskable.app/editor>, com fundo azul marinho `#0f2240`).
+(dá para fazer em <https://maskable.app/editor>, com fundo vinho `#3c191b`).
 
 ## 🔒 Segurança
 
