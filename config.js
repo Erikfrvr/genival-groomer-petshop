@@ -82,13 +82,6 @@ const CONFIG = {
       fotos: { p: "images/tosa-tesoura-p.webp", m: "images/tosa-tesoura-m.webp", g: "images/tosa-tesoura-g.webp" },
       foco: { p: "46%", m: "42%", g: "62%" },
     },
-    {
-      nome: "Banho e Tosa Bebê",
-      resumo: "O primeiro banho e tosa do filhote, com produtos suaves e muita paciência.",
-      precos: { p: 50, m: 60, g: 75 },
-      fotos: { p: "images/tosa-bebe-p.webp", m: "images/tosa-bebe-m.webp", g: "images/tosa-bebe-g.webp" },
-      foco: { p: "52%", m: "64%", g: "46%" },
-    },
   ],
 
   /* ---------- Extras (o cliente pode marcar vários) ----------
